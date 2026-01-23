@@ -7,18 +7,21 @@ import java.util.Scanner;
  */
 
 public class Anoop {
+    /**
+     * The main method that runs the Anoop chatbot.
+     *
+     * @param args command line arguments.
+     */
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        CommandHandler handler = new CommandHandler();
-        Parser parser = new Parser();
 
-        System.out.println(handler.handle(Command.GREETING, ""));
+        System.out.println(CommandHandler.handle(Command.GREETING, ""));
 
         while (true) {
             String input = sc.nextLine();
-            Command cmd = parser.parse(input);
+            Command cmd = Parser.parse(input);
 
-            System.out.println(handler.handle(cmd, input));
+            System.out.println(CommandHandler.handle(cmd, input));
 
             if (cmd == Command.BYE) {
                 break;

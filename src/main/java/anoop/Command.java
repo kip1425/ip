@@ -5,8 +5,9 @@ package anoop;
  */
 
 public enum Command {
-    GREETING,
-    BYE,
-    UNKNOWN;
+    GREETING, // Greet the user
+    BYE,      // Exit the chatbot
+    TASK,     // Add a task
+    LIST;     // List all tasks
 }
 
