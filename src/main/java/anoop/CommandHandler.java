@@ -72,6 +72,8 @@ public class CommandHandler {
                             Now you have %d task(s) in the list.
                             ____________________________________________________________
                             """.formatted(t.toString(), TaskStorage.getCurrentSize());
+                case UNKNOWN:
+                    return "Unknown command.";
                 default:
                     return """
                             ____________________________________________________________

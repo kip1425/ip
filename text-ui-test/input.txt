@@ -1,0 +1,16 @@
+Hello
+todo Homework
+deadline Tutorial /by 7th December
+event Party /from 6th June /to 7th June
+list
+mark 1
+list
+unmark 1
+list
+mark 0
+mark 4
+unmark 0
+unmark 4
+deadline Birthday
+event Birthday
+mark one

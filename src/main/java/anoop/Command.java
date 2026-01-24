@@ -10,6 +10,7 @@ public enum Command {
     TASK,     // Add a task
     LIST,     // List all tasks
     MARK,     // Marks task as done
-    UNMARK;   // Marks task as not done
+    UNMARK,   // Marks task as not done
+    UNKNOWN;  // Unknown command
 }
 

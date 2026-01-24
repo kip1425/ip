@@ -17,7 +17,7 @@ public class Anoop {
 
         System.out.println(CommandHandler.handle(Command.GREETING, ""));
 
-        while (true) {
+        while (sc.hasNext()) {
             String input = sc.nextLine();
             Command cmd = Parser.parse(input);
 

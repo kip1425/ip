@@ -17,7 +17,10 @@ public class Parser {
      */
     public static Command parse(String input) {
         String trimmed = input.trim();
-        if (trimmed.equals("bye")) {
+
+        if (trimmed.isEmpty()) {
+            return Command.UNKNOWN;
+        } else if (trimmed.equals("bye")) {
             return Command.BYE;
         } else if (trimmed.equals("list")) {
             return Command.LIST;
@@ -25,7 +28,10 @@ public class Parser {
             return Command.MARK;
         } else if (trimmed.startsWith(("unmark"))) {
             return Command.UNMARK;
+        } else if (trimmed.startsWith("todo ") || trimmed.startsWith("deadline ") || trimmed.startsWith("event ")) {
+            return Command.TASK;
+        } else {
+            return Command.UNKNOWN; // anything else is UNKNOWN
         }
-        return Command.TASK;
     }
 }
