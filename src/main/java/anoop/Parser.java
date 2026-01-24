@@ -8,6 +8,7 @@ public class Parser {
     // Prevents instantiation.
     private Parser() {
     }
+
     /**
      * Returns a {@link Command} corresponding to user input string.
      *
@@ -15,10 +16,15 @@ public class Parser {
      * @return a {@link Command} corresponding to user input string.
      */
     public static Command parse(String input) {
-        if (input.trim().equals("bye")) {
+        String trimmedInput = input.trim();
+        if (trimmedInput.equals("bye")) {
             return Command.BYE;
-        } else if (input.trim().equals("list")) {
+        } else if (trimmedInput.equals("list")) {
             return Command.LIST;
+        } else if (trimmedInput.startsWith("mark")) {
+            return Command.MARK;
+        } else if (trimmedInput.startsWith(("unmark"))) {
+            return Command.UNMARK;
         }
         return Command.TASK;
     }

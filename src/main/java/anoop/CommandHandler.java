@@ -1,5 +1,6 @@
 package anoop;
 
+import anoop.exception.InvalidTaskIndexException;
 import anoop.exception.StorageFullException;
 
 /**
@@ -15,7 +16,7 @@ public class CommandHandler {
      * Returns a string for the chatbot to print depending on the {@link Command} received.
      *
      * @param cmd the {@link Command} type representing the user's command.
-     * @param input the raw input string of the user, used when cmd is TASK.
+     * @param input the raw input string of the user.
      * @return a string representing the chatbot's response.
      */
     public static String handle(Command cmd, String input) {
@@ -36,8 +37,33 @@ public class CommandHandler {
                             """;
                 case LIST:
                     return TaskStorage.taskstoString();
+                case MARK: {
+                    String[] splitInput = input.trim().split("\\s+", 2);
+                    int storageIndex = Integer.parseInt(splitInput[1]);
+                    TaskStorage.markTaskAsDone(storageIndex);
+
+                    return """
+                            ____________________________________________________________
+                            Nice! I've marked this task as done:
+                              %s
+                            ____________________________________________________________
+                            """.formatted(TaskStorage.getTask(storageIndex));
+                }
+                case UNMARK: {
+                    String[] splitInput = input.trim().split("\\s+", 2);
+                    int storageIndex = Integer.parseInt(splitInput[1]);
+                    TaskStorage.markTaskAsNotDone(storageIndex);
+
+                    return """
+                            ____________________________________________________________
+                            Nice! I've marked this task as done:
+                              %s
+                            ____________________________________________________________
+                            """.formatted(TaskStorage.getTask(storageIndex));
+                }
                 case TASK:
-                    TaskStorage.store(input);
+                    Task t = new Task(input);
+                    TaskStorage.store(t);
                     return "added: " + input;
                 default:
                     return String.format("""
@@ -46,8 +72,10 @@ public class CommandHandler {
                             ____________________________________________________________
                             """, input);
             }
-        } catch (StorageFullException e) {
+        } catch (StorageFullException | InvalidTaskIndexException e) {
             return e.getMessage();
+        } catch (NumberFormatException e) {
+            return "Task number must be an integer.";
         }
     }
 }

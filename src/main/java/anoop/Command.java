@@ -8,6 +8,8 @@ public enum Command {
     GREETING, // Greet the user
     BYE,      // Exit the chatbot
     TASK,     // Add a task
-    LIST;     // List all tasks
+    LIST,     // List all tasks
+    MARK,     // Marks task as done
+    UNMARK;   // Marks task as not done
 }
 
