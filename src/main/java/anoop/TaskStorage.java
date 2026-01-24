@@ -62,7 +62,7 @@ public class TaskStorage {
      * @throws InvalidTaskIndexException if the index is invalid.
      */
     public static void markTaskAsNotDone(int index) throws InvalidTaskIndexException {
-        if (index < 1 || index > MAX_SIZE) {
+        if (index < 1 || index > tasks.size()) {
             throw new InvalidTaskIndexException(index);
         }
 
