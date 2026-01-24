@@ -16,14 +16,14 @@ public class Parser {
      * @return a {@link Command} corresponding to user input string.
      */
     public static Command parse(String input) {
-        String trimmedInput = input.trim();
-        if (trimmedInput.equals("bye")) {
+        String trimmed = input.trim();
+        if (trimmed.equals("bye")) {
             return Command.BYE;
-        } else if (trimmedInput.equals("list")) {
+        } else if (trimmed.equals("list")) {
             return Command.LIST;
-        } else if (trimmedInput.startsWith("mark")) {
+        } else if (trimmed.startsWith("mark")) {
             return Command.MARK;
-        } else if (trimmedInput.startsWith(("unmark"))) {
+        } else if (trimmed.startsWith(("unmark"))) {
             return Command.UNMARK;
         }
         return Command.TASK;

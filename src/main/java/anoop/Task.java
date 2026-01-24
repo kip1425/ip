@@ -4,13 +4,17 @@ package anoop;
  * Represents a user's task that can be marked or unmarked as done.
  */
 
-public class Task {
+public abstract class Task {
     /** Represents the description of the task. */
-    protected String description;
+    protected final String description;
 
     /** Represents the task's completion status */
-    private Boolean isDone = false;
+    protected boolean isDone = false;
 
+    /**
+     * Constructs a Task object with a description.
+     * @param description a description of the task.
+     */
     public Task(String description) {
         this.description = description;
     }
@@ -38,7 +42,7 @@ public class Task {
     }
 
     /**
-     * Returns a string representation of the task.
+     * Returns a string representation of the task with its status.
      */
     @Override
     public String toString() {

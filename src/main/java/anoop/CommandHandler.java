@@ -2,6 +2,7 @@ package anoop;
 
 import anoop.exception.InvalidTaskIndexException;
 import anoop.exception.StorageFullException;
+import anoop.exception.InvalidTaskFormatException;
 
 /**
  * Represents handler for chatbot commands.
@@ -56,25 +57,31 @@ public class CommandHandler {
 
                     return """
                             ____________________________________________________________
-                            Nice! I've marked this task as done:
+                            OK, I've marked this task as not done yet:
                               %s
                             ____________________________________________________________
                             """.formatted(TaskStorage.getTask(storageIndex));
                 }
                 case TASK:
-                    Task t = new Task(input);
+                    Task t = TaskFactory.createTask(input);
                     TaskStorage.store(t);
-                    return "added: " + input;
+                    return """
+                            ____________________________________________________________
+                            Got it. I've added this task:
+                              %s
+                            Now you have %d task(s) in the list.
+                            ____________________________________________________________
+                            """.formatted(t.toString(), TaskStorage.getCurrentSize());
                 default:
-                    return String.format("""
+                    return """
                             ____________________________________________________________
-                            %s
+                              %s
                             ____________________________________________________________
-                            """, input);
+                            """.formatted(input);
             }
-        } catch (StorageFullException | InvalidTaskIndexException e) {
+        } catch (StorageFullException | InvalidTaskIndexException | InvalidTaskFormatException e) {
             return e.getMessage();
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException e) { // For instances like "mark two" where user did not input an int
             return "Task number must be an integer.";
         }
     }

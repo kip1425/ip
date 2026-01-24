@@ -82,6 +82,15 @@ public class TaskStorage {
     }
 
     /**
+     * Getter method to get current number of tasks stored.
+     *
+     * @return current number of tasks stored.
+     */
+    public static int getCurrentSize() {
+        return tasks.size();
+    }
+
+    /**
      * Returns a string formatted as a list of the tasks stored.
      */
     @Override
