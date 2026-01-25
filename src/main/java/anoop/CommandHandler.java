@@ -73,7 +73,7 @@ public class CommandHandler {
                             ____________________________________________________________
                             """.formatted(t.toString(), TaskStorage.getCurrentSize());
                 case UNKNOWN:
-                    return "Unknown command.";
+                    return "Unknown command."; // Message when user enters unknown command.
                 default:
                     return """
                             ____________________________________________________________
