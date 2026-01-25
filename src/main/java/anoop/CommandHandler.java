@@ -72,6 +72,19 @@ public class CommandHandler {
                             Now you have %d task(s) in the list.
                             ____________________________________________________________
                             """.formatted(t.toString(), TaskStorage.getCurrentSize());
+                case DELETE:
+                    String[] splitInput = input.trim().split("\\s+", 2);
+                    int storageIndex = Integer.parseInt(splitInput[1]);
+                    Task taskToDelete = TaskStorage.getTask(storageIndex);
+                    TaskStorage.deleteTask(storageIndex);
+
+                    return """
+                            ____________________________________________________________
+                            Noted. I've removed this task:
+                              %s
+                            Now you have %d task(s) in the list.
+                            ____________________________________________________________
+                            """.formatted(taskToDelete, TaskStorage.getCurrentSize());
                 case UNKNOWN:
                     return "Unknown command."; // Message when user enters unknown command.
                 default:

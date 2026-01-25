@@ -78,6 +78,10 @@ public class TaskStorage {
      * @throws InvalidTaskIndexException if the index is invalid.
      */
     public static Task getTask(int index) throws InvalidTaskIndexException {
+        if (index < 1 || index > tasks.size()) {
+            throw new InvalidTaskIndexException(index);
+        }
+
         return tasks.get(index - 1); // convert 1-based to 0-based;
     }
 
@@ -105,6 +109,20 @@ public class TaskStorage {
 
         sb.append("____________________________________________________________");
         return sb.toString();
+    }
+
+    /**
+     * Deletes the task at the 1-based index
+     *
+     * @param index the 1-based index of the task to delete.
+     * @throws InvalidTaskIndexException if the index is invalid.
+     */
+    public static void deleteTask(int index) throws InvalidTaskIndexException {
+        if (index < 1 || index > tasks.size()) {
+            throw new InvalidTaskIndexException(index);
+        }
+
+        tasks.remove(index - 1); // convert 1-based to 0-based;
     }
 
     /**

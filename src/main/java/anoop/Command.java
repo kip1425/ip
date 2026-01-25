@@ -11,6 +11,7 @@ public enum Command {
     LIST,     // List all tasks
     MARK,     // Marks task as done
     UNMARK,   // Marks task as not done
+    DELETE,   // Delete a task
     UNKNOWN;  // Unknown command
 }
 

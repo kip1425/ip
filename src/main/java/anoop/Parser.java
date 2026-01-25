@@ -24,12 +24,14 @@ public class Parser {
             return Command.BYE;
         } else if (trimmed.equals("list")) {
             return Command.LIST;
-        } else if (trimmed.startsWith("mark")) {
+        } else if (trimmed.startsWith("mark ")) {
             return Command.MARK;
-        } else if (trimmed.startsWith(("unmark"))) {
+        } else if (trimmed.startsWith(("unmark "))) {
             return Command.UNMARK;
         } else if (trimmed.startsWith("todo ") || trimmed.startsWith("deadline ") || trimmed.startsWith("event ")) {
             return Command.TASK;
+        } else if (trimmed.startsWith("delete ")) {
+            return Command.DELETE;
         } else {
             return Command.UNKNOWN; // anything else is UNKNOWN
         }
