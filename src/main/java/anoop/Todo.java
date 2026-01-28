@@ -8,9 +8,10 @@ public class Todo extends Task{
     /**
      * Constructs a {@code Todo} {@link Task} with a description.
      * @param description a description of the task.
+     * @param isDone completion status of the task.
      */
-    public Todo(String description) {
-        super(description);
+    public Todo(String description, boolean isDone) {
+        super(description, isDone);
     }
 
     /**

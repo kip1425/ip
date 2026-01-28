@@ -31,7 +31,7 @@ public class TaskFactory {
             if (description.isEmpty()) {
                 throw new InvalidTaskFormatException("Todo description cannot be empty.");
             }
-            return new Todo(description);
+            return new Todo(description, false);
 
         } else if (trimmed.startsWith("deadline ")) { // Creates Deadline task
             try {
@@ -42,7 +42,7 @@ public class TaskFactory {
                 if (description.isEmpty() || by.isEmpty()) {
                     throw new InvalidTaskFormatException("Deadline description or date/time cannot be empty.");
                 }
-                return new Deadline(description, by);
+                return new Deadline(description, false, by);
             } catch (ArrayIndexOutOfBoundsException e) {
                 throw new InvalidTaskFormatException("\"/by\" must be included before date/time.");
             }
@@ -58,7 +58,7 @@ public class TaskFactory {
                     throw new InvalidTaskFormatException("Event description or start and end date/time "
                             + "cannot be empty.");
                 }
-                return new Event(description, start, end);
+                return new Event(description, false, start, end);
             } catch (ArrayIndexOutOfBoundsException e) {
                 throw new InvalidTaskFormatException("\"/from\" and \"/to\" must be included before date/time.");
             }
@@ -66,4 +66,23 @@ public class TaskFactory {
             throw new InvalidTaskFormatException("Unknown task type. Must start with todo, deadline, or event.");
         }
     }
+
+    /**
+     * Factory method to instantiate a {@link Task} depending on the task's string representation.
+     *
+     * @param type the task type identifier.
+     * @param isDone task completion status.
+     * @param args variable arguments containing task-specific fields.
+     * @return a {@link Task} object depending on the input.
+     * @throws InvalidTaskFormatException if task type is not valid.
+     */
+    public static Task createTaskFromData(char type, boolean isDone, String... args) throws InvalidTaskFormatException {
+        return switch (type) {
+            case 'T' -> new Todo(args[0], isDone);
+            case 'D' -> new Deadline(args[0], isDone, args[1]);
+            case 'E' -> new Event(args[0], isDone, args[1], args[2]);
+            default -> throw new InvalidTaskFormatException("Invalid task format.");
+        };
+    }
+
 }

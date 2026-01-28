@@ -1,16 +1,22 @@
 package anoop;
 
 import anoop.exception.InvalidTaskIndexException;
-import anoop.exception.StorageFullException;
+import anoop.exception.ListFullException;
 import anoop.exception.InvalidTaskFormatException;
+
+import java.io.IOException;
 
 /**
  * Represents handler for chatbot commands.
  */
 
 public class CommandHandler {
-    // Prevents instantiation.
-    private CommandHandler() {
+    private final TaskList taskList;
+    private final Storage storage;
+
+    public CommandHandler(TaskList taskList, Storage storage) {
+        this.taskList = taskList;
+        this.storage = storage;
     }
 
     /**
@@ -20,7 +26,7 @@ public class CommandHandler {
      * @param input the raw input string of the user.
      * @return a string representing the chatbot's response.
      */
-    public static String handle(Command cmd, String input) {
+    public String handle(Command cmd, String input) {
         try {
             switch (cmd) {
                 case GREETING:
@@ -37,54 +43,57 @@ public class CommandHandler {
                             ____________________________________________________________
                             """;
                 case LIST:
-                    return TaskStorage.taskstoString();
+                    return this.taskList.toString();
                 case MARK: {
                     String[] splitInput = input.trim().split("\\s+", 2);
-                    int storageIndex = Integer.parseInt(splitInput[1]);
-                    TaskStorage.markTaskAsDone(storageIndex);
+                    int listIndex = Integer.parseInt(splitInput[1]);
+                    this.taskList.markTaskAsDone(listIndex);
+                    storage.saveTasks(this.taskList.getListOfTasks());
 
                     return """
                             ____________________________________________________________
                             Nice! I've marked this task as done:
                               %s
                             ____________________________________________________________
-                            """.formatted(TaskStorage.getTask(storageIndex));
+                            """.formatted(this.taskList.getTask(listIndex));
                 }
                 case UNMARK: {
                     String[] splitInput = input.trim().split("\\s+", 2);
-                    int storageIndex = Integer.parseInt(splitInput[1]);
-                    TaskStorage.markTaskAsNotDone(storageIndex);
+                    int listIndex = Integer.parseInt(splitInput[1]);
+                    this.taskList.markTaskAsNotDone(listIndex);
+                    storage.saveTasks(this.taskList.getListOfTasks());
 
                     return """
                             ____________________________________________________________
                             OK, I've marked this task as not done yet:
                               %s
                             ____________________________________________________________
-                            """.formatted(TaskStorage.getTask(storageIndex));
+                            """.formatted(this.taskList.getTask(listIndex));
                 }
                 case TASK:
                     Task t = TaskFactory.createTask(input);
-                    TaskStorage.store(t);
+                    this.taskList.store(t);
+                    storage.saveTasks(this.taskList.getListOfTasks());
                     return """
                             ____________________________________________________________
                             Got it. I've added this task:
                               %s
                             Now you have %d task(s) in the list.
                             ____________________________________________________________
-                            """.formatted(t.toString(), TaskStorage.getCurrentSize());
+                            """.formatted(t.toString(), this.taskList.getCurrentSize());
                 case DELETE:
                     String[] splitInput = input.trim().split("\\s+", 2);
-                    int storageIndex = Integer.parseInt(splitInput[1]);
-                    Task taskToDelete = TaskStorage.getTask(storageIndex);
-                    TaskStorage.deleteTask(storageIndex);
-
+                    int listIndex = Integer.parseInt(splitInput[1]);
+                    Task taskToDelete = this.taskList.getTask(listIndex);
+                    this.taskList.deleteTask(listIndex);
+                    storage.saveTasks(this.taskList.getListOfTasks());
                     return """
                             ____________________________________________________________
                             Noted. I've removed this task:
                               %s
                             Now you have %d task(s) in the list.
                             ____________________________________________________________
-                            """.formatted(taskToDelete, TaskStorage.getCurrentSize());
+                            """.formatted(taskToDelete, this.taskList.getCurrentSize());
                 case UNKNOWN:
                     return "Unknown command."; // Message when user enters unknown command.
                 default:
@@ -94,10 +103,12 @@ public class CommandHandler {
                             ____________________________________________________________
                             """.formatted(input);
             }
-        } catch (StorageFullException | InvalidTaskIndexException | InvalidTaskFormatException e) {
+        } catch (ListFullException | InvalidTaskIndexException | InvalidTaskFormatException e) {
             return e.getMessage();
         } catch (NumberFormatException e) { // For instances like "mark two" where user did not input an int
             return "Task number must be an integer.";
+        } catch (IOException e) {
+            return "Save/Load has failed.";
         }
     }
 }
