@@ -91,7 +91,7 @@ public class TaskFactory {
      * @param type the task type identifier.
      * @param isDone task completion status.
      * @param args variable arguments containing task-specific fields.
-     * @return a {@link Task} object depending on the input.
+     * @return a {@link Task} object depending on the data input.
      * @throws InvalidTaskFormatException if task type is not valid.
      */
     public static Task createTaskFromData(char type, boolean isDone, String... args) throws InvalidTaskFormatException {
