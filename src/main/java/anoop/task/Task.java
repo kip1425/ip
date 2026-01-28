@@ -1,4 +1,4 @@
-package anoop;
+package anoop.task;
 
 /**
  * Represents a user's task that can be marked or unmarked as done.
