@@ -2,6 +2,10 @@ package anoop;
 
 import anoop.exception.InvalidTaskFormatException;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 /**
  * A class that contains a factory method to instantiate different types of {@link Task}.
  */
@@ -10,6 +14,9 @@ public class TaskFactory {
     private static final int TODO_OFFSET = 5;
     private static final int DEADLINE_OFFSET = 9;
     private static final int EVENT_OFFSET = 6;
+
+    /** Input format of date/time. */
+    private static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
 
     // Prevents instantiation.
     private TaskFactory() {
@@ -42,9 +49,14 @@ public class TaskFactory {
                 if (description.isEmpty() || by.isEmpty()) {
                     throw new InvalidTaskFormatException("Deadline description or date/time cannot be empty.");
                 }
-                return new Deadline(description, false, by);
+
+                LocalDateTime byDateTime = LocalDateTime.parse(by, INPUT_FORMAT);
+                return new Deadline(description, false, byDateTime);
             } catch (ArrayIndexOutOfBoundsException e) {
                 throw new InvalidTaskFormatException("\"/by\" must be included before date/time.");
+            } catch (DateTimeParseException e) {
+                throw new InvalidTaskFormatException("Invalid date/time format. " +
+                        "Use yyyy-MM-dd HHmm (e.g. 2026-01-29 2000).");
             }
 
         } else if (trimmed.startsWith("event ")) { // Creates Event task
@@ -58,9 +70,15 @@ public class TaskFactory {
                     throw new InvalidTaskFormatException("Event description or start and end date/time "
                             + "cannot be empty.");
                 }
-                return new Event(description, false, start, end);
+
+                LocalDateTime startDateTime = LocalDateTime.parse(start, INPUT_FORMAT);
+                LocalDateTime endDateTime = LocalDateTime.parse(end, INPUT_FORMAT);
+                return new Event(description, false, startDateTime, endDateTime);
             } catch (ArrayIndexOutOfBoundsException e) {
                 throw new InvalidTaskFormatException("\"/from\" and \"/to\" must be included before date/time.");
+            } catch (DateTimeParseException e) {
+                throw new InvalidTaskFormatException("Invalid date/time format. " +
+                        "Use yyyy-MM-dd HHmm (e.g. 2026-01-29 2000).");
             }
         } else {
             throw new InvalidTaskFormatException("Unknown task type. Must start with todo, deadline, or event.");
@@ -79,8 +97,15 @@ public class TaskFactory {
     public static Task createTaskFromData(char type, boolean isDone, String... args) throws InvalidTaskFormatException {
         return switch (type) {
             case 'T' -> new Todo(args[0], isDone);
-            case 'D' -> new Deadline(args[0], isDone, args[1]);
-            case 'E' -> new Event(args[0], isDone, args[1], args[2]);
+            case 'D' -> {
+                LocalDateTime by = LocalDateTime.parse(args[1], INPUT_FORMAT);
+                yield new Deadline(args[0], isDone, by);
+            }
+            case 'E' -> {
+                LocalDateTime from = LocalDateTime.parse(args[1], INPUT_FORMAT);
+                LocalDateTime to = LocalDateTime.parse(args[1], INPUT_FORMAT);
+                yield new Event(args[0], isDone, from, to);
+            }
             default -> throw new InvalidTaskFormatException("Invalid task format.");
         };
     }
