@@ -15,8 +15,9 @@ public class TaskFactory {
     private static final int DEADLINE_OFFSET = 9;
     private static final int EVENT_OFFSET = 6;
 
-    /** Input format of date/time. */
+    /** Input/output format of date/time. */
     private static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+    private static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma");
 
     // Prevents instantiation.
     private TaskFactory() {
@@ -95,19 +96,23 @@ public class TaskFactory {
      * @throws InvalidTaskFormatException if task type is not valid.
      */
     public static Task createTaskFromData(char type, boolean isDone, String... args) throws InvalidTaskFormatException {
-        return switch (type) {
-            case 'T' -> new Todo(args[0], isDone);
-            case 'D' -> {
-                LocalDateTime by = LocalDateTime.parse(args[1], INPUT_FORMAT);
-                yield new Deadline(args[0], isDone, by);
-            }
-            case 'E' -> {
-                LocalDateTime from = LocalDateTime.parse(args[1], INPUT_FORMAT);
-                LocalDateTime to = LocalDateTime.parse(args[1], INPUT_FORMAT);
-                yield new Event(args[0], isDone, from, to);
-            }
-            default -> throw new InvalidTaskFormatException("Invalid task format.");
-        };
+        try {
+            return switch (type) {
+                case 'T' -> new Todo(args[0], isDone);
+                case 'D' -> {
+                    LocalDateTime by = LocalDateTime.parse(args[1], OUTPUT_FORMAT);
+                    yield new Deadline(args[0], isDone, by);
+                }
+                case 'E' -> {
+                    LocalDateTime from = LocalDateTime.parse(args[1], OUTPUT_FORMAT);
+                    LocalDateTime to = LocalDateTime.parse(args[1], OUTPUT_FORMAT);
+                    yield new Event(args[0], isDone, from, to);
+                }
+                default -> throw new InvalidTaskFormatException("Invalid task format.");
+            };
+        } catch (DateTimeParseException e) {
+            throw new InvalidTaskFormatException("Invalid task format.");
+        }
     }
 
 }
