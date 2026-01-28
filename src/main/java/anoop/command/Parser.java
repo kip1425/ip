@@ -1,4 +1,4 @@
-package anoop;
+package anoop.command;
 
 /**
  * Represents a parser to parse the user's input string into a Command object.

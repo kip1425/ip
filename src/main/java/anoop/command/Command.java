@@ -1,4 +1,4 @@
-package anoop;
+package anoop.command;
 
 /**
  * Represents commands which the chatbot can execute.
