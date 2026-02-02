@@ -36,7 +36,7 @@ public class TaskFactory {
                 }
                 case 'E' -> {
                     LocalDateTime from = LocalDateTime.parse(args[1], OUTPUT_FORMAT);
-                    LocalDateTime to = LocalDateTime.parse(args[1], OUTPUT_FORMAT);
+                    LocalDateTime to = LocalDateTime.parse(args[2], OUTPUT_FORMAT);
                     yield new Event(args[0], isDone, from, to);
                 }
                 default -> throw new InvalidTaskFormatException("Invalid task format.");
