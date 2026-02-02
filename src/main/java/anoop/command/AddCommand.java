@@ -1,0 +1,34 @@
+package anoop.command;
+
+import anoop.Storage;
+import anoop.Ui;
+import anoop.exception.AnoopException;
+import anoop.task.Task;
+import anoop.task.TaskList;
+
+/**
+ * Represents a command to add tasks to the task list.
+ */
+public class AddCommand extends Command {
+    private final Task task;
+
+    /** Constructor for AddCommand, includes which task to add. */
+    public AddCommand(Task task) {
+        this.task = task;
+    }
+
+    /**
+     * Adds the task to the task list and saves the updated list to the storage.
+     *
+     * @param ui user interface to show task added message.
+     * @param storage storage to save the updated task list.
+     * @param taskList task list to add the task to.
+     * @throws AnoopException if list is already full or saving fails.
+     */
+    @Override
+    public void execute(Ui ui, Storage storage, TaskList taskList) throws AnoopException {
+        taskList.store(this.task);
+        storage.saveTasks(taskList.getListOfTasks());
+        ui.showTaskAdded(this.task, taskList);
+    }
+}

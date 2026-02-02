@@ -1,17 +1,20 @@
 package anoop.command;
 
+import anoop.Storage;
+import anoop.Ui;
+import anoop.task.TaskList;
+
+import anoop.exception.AnoopException;
+
 /**
  * Represents commands which the chatbot can execute.
  */
 
-public enum Command {
-    GREETING, // Greet the user
-    BYE,      // Exit the chatbot
-    TASK,     // Add a task
-    LIST,     // List all tasks
-    MARK,     // Marks task as done
-    UNMARK,   // Marks task as not done
-    DELETE,   // Delete a task
-    UNKNOWN;  // Unknown command
+public abstract class Command {
+    public abstract void execute(Ui ui, Storage storage, TaskList taskList) throws AnoopException;
+
+    public boolean isExit() {
+        return false;
+    }
 }
 

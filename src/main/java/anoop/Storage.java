@@ -1,6 +1,6 @@
 package anoop;
 
-import anoop.exception.InvalidTaskFormatException;
+import anoop.exception.*;
 import anoop.task.Task;
 import anoop.task.TaskFactory;
 
@@ -15,7 +15,6 @@ import java.util.Scanner;
 /**
  * Represents a task storage to save/load tasks in the disk.
  */
-
 public class Storage {
     /** Relative file directory for the data file. */
     private static final String DIR = "data";
@@ -30,58 +29,73 @@ public class Storage {
     private final File file;
 
     /**
-     * Instantiates a storage object to save/load tasks.
-     * @throws IOException if directory/file cannot be created due to I/O errors.
+     * Constructor for the {@link Storage} class.
      */
-    public Storage() throws IOException {
+    public Storage() {
         this.dir = new File(DIR);
-        if (!this.dir.exists()) {
-            this.dir.mkdir();
-        }
-
         this.file = new File(DIR, FILE);
-        if (!this.file.exists()) {
-            this.file.createNewFile();
+    }
+
+    /**
+     * Helper method to ensure the save file and its directory exists.
+     *
+     * @throws IOException creation of file or directory fails.
+     */
+    private void ensureFileExists() throws IOException {
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        if (!file.exists()) {
+            file.createNewFile();
         }
     }
 
     /**
      * Saves input task list to the disk.
      * @param tasks the list of tasks.
-     * @throws IOException when I/O error occurs when writing to the file.
+     * @throws SaveFailedException when I/O error occurs when writing to the file.
      */
-    public void saveTasks(List<Task> tasks) throws IOException {
-        FileWriter fw = new FileWriter(this.file);
-        for (Task t : tasks) {
-            fw.write(t.toString());
-            fw.write(System.lineSeparator());
+    public void saveTasks(List<Task> tasks) throws SaveFailedException {
+        try {
+            this.ensureFileExists();
+            FileWriter fw = new FileWriter(this.file);
+            for (Task t : tasks) {
+                fw.write(t.toString());
+                fw.write(System.lineSeparator());
+            }
+            fw.close();
+        } catch (IOException e) {
+            throw new SaveFailedException();
         }
-
-        fw.close();
     }
 
     /**
      * Loads a list of tasks from the disk.
      * @return a list of tasks loaded from the disk.
-     * @throws IOException when I/O error occurs when reading from the file.
+     * @throws LoadFailedException when I/O error occurs when reading from the file.
      */
-    public List<Task> loadTasks() throws IOException {
-        List<Task> tasks = new ArrayList<>();
-        if (!this.file.exists()) {
-            return tasks;
-        }
-
-        Scanner sc = new Scanner(file);
-        while (sc.hasNextLine()) {
-            try {
-                String line = sc.nextLine();
-                Task t = this.parse(line);
-                tasks.add(t);
-            } catch (InvalidTaskFormatException e) {
-                System.out.println("Skipping corrupted line.");
+    public List<Task> loadTasks() throws LoadFailedException {
+        try {
+            this.ensureFileExists();
+            List<Task> tasks = new ArrayList<>();
+            if (!this.file.exists()) {
+                return tasks;
             }
+
+            Scanner sc = new Scanner(file);
+            while (sc.hasNextLine()) {
+                try {
+                    String line = sc.nextLine();
+                    Task t = this.parse(line);
+                    tasks.add(t);
+                } catch (InvalidTaskFormatException e) {
+                    System.out.println("Skipping corrupted line.");
+                }
+            }
+            return tasks;
+        } catch (IOException e) {
+            throw new LoadFailedException();
         }
-        return tasks;
     }
 
     /**

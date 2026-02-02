@@ -1,8 +1,8 @@
 package anoop;
 
 import anoop.command.Command;
-import anoop.command.CommandHandler;
-import anoop.command.Parser;
+import anoop.exception.AnoopException;
+import anoop.exception.LoadFailedException;
 import anoop.task.Task;
 import anoop.task.TaskList;
 
@@ -12,13 +12,11 @@ import java.util.List;
 /**
  * Represents the Anoop chatbot.
  */
-
 public class Anoop {
-    /** Handles user commands. */
-    private CommandHandler ch;
-
     /** Handles input and output with the user. */
-    private Ui ui;
+    private final Ui ui;
+    private final Storage storage;
+    private TaskList taskList;
 
     /**
      * Instantiates an Anoop chatbot instance.
@@ -27,18 +25,14 @@ public class Anoop {
      */
     public Anoop() {
         ui = new Ui();
-        Storage storage = null;
-        TaskList taskList = null;
+        storage = new Storage();
 
         try {
-            storage = new Storage();
             List<Task> tasks = storage.loadTasks();
             taskList = new TaskList(tasks);
-            this.ch = new CommandHandler(taskList, storage);
-        } catch (IOException e) {
+        } catch (AnoopException e) {
             this.ui.showLoadingError();
             taskList = new TaskList();
-            this.ch = new CommandHandler(taskList, null);
         }
     }
 
@@ -48,16 +42,20 @@ public class Anoop {
      * Loop ends when the command "bye" is received.
      */
     public void run() {
-        this.ui.showMessage(this.ch.handle(Command.GREETING, ""));
+        this.ui.showGreeting();
 
         while (true) {
-            String input = this.ui.readInput();
-            Command cmd = Parser.parse(input);
+            try {
+                String input = this.ui.readInput();
+                Command cmd = Parser.parse(input);
 
-            ui.showMessage(this.ch.handle(cmd, input));
+                cmd.execute(ui, storage, taskList);
 
-            if (cmd == Command.BYE) {
-                break;
+                if (cmd.isExit()) {
+                    break;
+                }
+            } catch (AnoopException e) {
+                System.out.println(e.getMessage());
             }
         }
     }

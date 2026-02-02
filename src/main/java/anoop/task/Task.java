@@ -3,7 +3,6 @@ package anoop.task;
 /**
  * Represents a user's task that can be marked or unmarked as done.
  */
-
 public abstract class Task {
     /** Represents the description of the task. */
     protected final String description;

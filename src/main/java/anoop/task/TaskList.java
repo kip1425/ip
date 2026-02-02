@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * Represents a list class to store the user's tasks.
  */
-
 public class TaskList {
     /** ArrayList to store users' tasks. */
     private List<Task> tasks = new ArrayList<>(100);
@@ -134,14 +133,10 @@ public class TaskList {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("____________________________________________________________\n");
-
         for (int i = 0; i < tasks.size(); i++) {
             // convert 0-based to 1-based
             sb.append(i + 1).append(". ").append(tasks.get(i).toString()).append("\n");
         }
-
-        sb.append("____________________________________________________________");
         return sb.toString();
     }
 }

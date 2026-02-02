@@ -3,9 +3,12 @@ package anoop.task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents a Deadline {@link Task}.
+ */
 public class Deadline extends Task {
     /** Date/time to complete the task by. */
-    private final LocalDateTime by;
+    protected final LocalDateTime by;
 
     /** Output format of date/time when toString(). */
     private static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma");

@@ -3,12 +3,15 @@ package anoop.task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents an Event {@link Task}.
+ */
 public class Event extends Task {
     /** Start date/time of event */
-    private final LocalDateTime start;
+    protected final LocalDateTime start;
 
     /** End date/time of event */
-    private final LocalDateTime end;
+    protected final LocalDateTime end;
 
     /** Output format of date/time when toString(). */
     private static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma");
