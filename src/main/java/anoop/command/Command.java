@@ -13,6 +13,11 @@ import anoop.exception.AnoopException;
 public abstract class Command {
     public abstract void execute(Ui ui, Storage storage, TaskList taskList) throws AnoopException;
 
+    /**
+     * Returns false to indicate this command should not exit the application.
+     *
+     * @return false
+     */
     public boolean isExit() {
         return false;
     }
