@@ -14,6 +14,14 @@ public class Todo extends Task{
     }
 
     /**
+     * Returns a semantic copy of the {@link Todo}.
+     */
+    @Override
+    public Todo clone() {
+        return new Todo(this.description, this.isDone);
+    }
+
+    /**
      * Returns a string representation of the task with its status and task type.
      */
     @Override

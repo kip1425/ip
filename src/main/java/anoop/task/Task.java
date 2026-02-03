@@ -43,6 +43,12 @@ public abstract class Task {
     }
 
     /**
+     * Returns a semantic copy of the Task.
+     */
+    @Override
+    public abstract Task clone();
+
+    /**
      * Returns a string representation of the task with its status.
      */
     @Override

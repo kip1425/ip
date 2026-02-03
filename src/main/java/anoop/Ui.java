@@ -115,6 +115,24 @@ public class Ui {
     }
 
     /**
+     * Shows a message displaying the tasks matching the keyword.
+     *
+     * @param taskList new task list obtained after finding using keyword.
+     */
+    public void showFind(TaskList taskList) {
+        if (taskList.getCurrentSize() <= 0) {
+            showMessage(LINE,
+                    "There are no tasks which match the keyword.",
+                    LINE);
+            return;
+        }
+        showMessage(LINE,
+                "Here are the matching tasks in your list:",
+                taskList.toString(),
+                LINE);
+    }
+
+    /**
      * Displays an error message indicating tasks have failed to load from the storage.
      */
     public void showLoadingError() {
