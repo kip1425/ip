@@ -27,6 +27,14 @@ public class Deadline extends Task {
     }
 
     /**
+     * Returns a semantic copy of the {@link Deadline}.
+     */
+    @Override
+    public Deadline clone() {
+        return new Deadline(this.description, this.isDone, this.by);
+    }
+
+    /**
      * Returns a string representation of the task with its status and task type.
      * Contains the date/time to complete the task by.
      */

@@ -30,6 +30,22 @@ public class TaskList {
     }
 
     /**
+     * Searches for tasks in the task list which contain the keyword.
+     *
+     * @param keyword keyword to be used for searching.
+     * @return a new TaskList containing the matching tasks.
+     */
+    public TaskList find(String keyword) {
+        List<Task> list = new ArrayList<>();
+        for (Task t : tasks) {
+            if (t.description.contains(keyword)) {
+                list.add(t.clone());
+            }
+        }
+        return new TaskList(list);
+    }
+
+    /**
      * Adds the user input task into a task list.
      * If the list is already full, an exception is thrown.
      *

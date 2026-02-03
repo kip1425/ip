@@ -31,6 +31,14 @@ public class Event extends Task {
     }
 
     /**
+     * Returns a semantic copy of the {@link Event}.
+     */
+    @Override
+    public Event clone() {
+        return new Event(this.description, this.isDone, this.start, this.end);
+    }
+
+    /**
      * Returns a string representation of the task with its status and task type.
      * Contains the date/time of when the event starts and ends.
      */
