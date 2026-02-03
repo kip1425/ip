@@ -5,6 +5,7 @@ import anoop.command.AddCommand;
 import anoop.command.ByeCommand;
 import anoop.command.Command;
 import anoop.command.DeleteCommand;
+import anoop.command.FindCommand;
 import anoop.command.ListCommand;
 import anoop.command.MarkCommand;
 import anoop.command.UnmarkCommand;
