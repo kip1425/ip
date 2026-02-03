@@ -38,16 +38,16 @@ public class Parser {
         Command cmd = null;
 
         return switch (cmdString) {
-        case "bye" -> new ByeCommand();
-        case "list" -> new ListCommand();
-        case "mark" -> new MarkCommand(parseIndex(args, cmdString));
-        case "unmark" -> new UnmarkCommand(parseIndex(args, cmdString));
-        case "todo" -> new AddCommand(parseTodo(args));
-        case "deadline" -> new AddCommand(parseDeadline(args));
-        case "event" -> new AddCommand(parseEvent(args));
-        case "delete" -> new DeleteCommand(parseIndex(args, cmdString));
-        case "find" -> new FindCommand(args);
-        default -> throw new AnoopException("Unknown command entered.");
+            case "bye" -> new ByeCommand();
+            case "list" -> new ListCommand();
+            case "mark" -> new MarkCommand(parseIndex(args, cmdString));
+            case "unmark" -> new UnmarkCommand(parseIndex(args, cmdString));
+            case "todo" -> new AddCommand(parseTodo(args));
+            case "deadline" -> new AddCommand(parseDeadline(args));
+            case "event" -> new AddCommand(parseEvent(args));
+            case "delete" -> new DeleteCommand(parseIndex(args, cmdString));
+            case "find" -> new FindCommand(args);
+            default -> throw new AnoopException("Unknown command entered.");
         };
     }
 
