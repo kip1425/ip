@@ -1,9 +1,11 @@
 package anoop;
 
+import java.util.Scanner;
+
 import anoop.task.Task;
 import anoop.task.TaskList;
 
-import java.util.Scanner;
+
 
 /**
  * Handles user interaction with the Anoop chatbot.

@@ -2,7 +2,6 @@ package anoop.command;
 
 import anoop.Storage;
 import anoop.Ui;
-import anoop.exception.AnoopException;
 import anoop.task.TaskList;
 
 /**
