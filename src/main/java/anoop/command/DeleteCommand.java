@@ -23,13 +23,14 @@ public class DeleteCommand extends Command {
      * @param ui user interface to show task deleted message.
      * @param storage storage to save the updated task list.
      * @param taskList task list containing the task to delete.
+     * @return response string for the UI to display.
      * @throws AnoopException when index is not valid or saving fails.
      */
     @Override
-    public void execute(Ui ui, Storage storage, TaskList taskList) throws AnoopException {
+    public String execute(Ui ui, Storage storage, TaskList taskList) throws AnoopException {
         Task t = taskList.getTask(index);
         taskList.deleteTask(index);
         storage.saveTasks(taskList.getListOfTasks());
-        ui.showDelete(t, taskList);
+        return ui.showDelete(t, taskList);
     }
 }

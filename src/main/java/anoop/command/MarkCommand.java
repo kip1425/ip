@@ -23,13 +23,14 @@ public class MarkCommand extends Command {
      * @param ui user interface to show task marked message.
      * @param storage storage to save the updated task list.
      * @param taskList task list containing the task to mark.
+     * @return response string for the UI to display.
      * @throws AnoopException when index is not valid or saving fails.
      */
     @Override
-    public void execute(Ui ui, Storage storage, TaskList taskList) throws AnoopException {
+    public String execute(Ui ui, Storage storage, TaskList taskList) throws AnoopException {
         Task t = taskList.getTask(index);
         taskList.markTaskAsDone(index);
         storage.saveTasks(taskList.getListOfTasks());
-        ui.showMarked(t);
+        return ui.showMarked(t);
     }
 }

@@ -26,10 +26,11 @@ public class FindCommand extends Command {
      * @param ui UI used to display results.
      * @param storage storage used by the application (unused here).
      * @param taskList task list to search.
+     * @return response string for the UI to display.
      */
     @Override
-    public void execute(Ui ui, Storage storage, TaskList taskList) {
+    public String execute(Ui ui, Storage storage, TaskList taskList) {
         TaskList temp = taskList.find(this.keyword);
-        ui.showFind(temp);
+        return ui.showFind(temp);
     }
 }

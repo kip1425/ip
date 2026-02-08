@@ -29,9 +29,9 @@ public class Ui {
      *
      * @param input the message to display.
      */
-    private void showMessage(String... input) {
+    private String showMessage(String... input) {
         String res = String.join(System.lineSeparator(), input) + System.lineSeparator();
-        System.out.println(res);
+        return res;
     }
 
     /**
@@ -40,8 +40,8 @@ public class Ui {
      * @param t task that was added.
      * @param taskList task list containing the added task.
      */
-    public void showTaskAdded(Task t, TaskList taskList) {
-        showMessage(LINE,
+    public String showTaskAdded(Task t, TaskList taskList) {
+        return showMessage(LINE,
                 "Got it. I've added this task:",
                 t.toString(),
                 "Now you have %d task(s) in the list.".formatted(taskList.getCurrentSize()),
@@ -51,8 +51,8 @@ public class Ui {
     /**
      * Shows the greeting message.
      */
-    public void showGreeting() {
-        showMessage(LINE,
+    public String showGreeting() {
+        return showMessage(LINE,
                 "Hello! I'm Anoop",
                 "What can I do for you?",
                 LINE);
@@ -63,8 +63,8 @@ public class Ui {
      *
      * @param t task that was marked.
      */
-    public void showMarked(Task t) {
-        showMessage(LINE,
+    public String showMarked(Task t) {
+        return showMessage(LINE,
                 "Nice! I've marked this task as done:",
                 t.toString(),
                 LINE);
@@ -75,8 +75,8 @@ public class Ui {
      *
      * @param t task that was unmarked.
      */
-    public void showUnmarked(Task t) {
-        showMessage(LINE,
+    public String showUnmarked(Task t) {
+        return showMessage(LINE,
                 "OK, I've marked this task as not done yet:",
                 t.toString(),
                 LINE);
@@ -85,8 +85,8 @@ public class Ui {
     /**
      * Shows the goodbye message.
      */
-    public void showBye() {
-        showMessage(LINE,
+    public String showBye() {
+        return showMessage(LINE,
                 "Bye. Hope to see you again soon!",
                 LINE);
     }
@@ -96,8 +96,8 @@ public class Ui {
      *
      * @param taskList task list to show.
      */
-    public void showList(TaskList taskList) {
-        showMessage(LINE,
+    public String showList(TaskList taskList) {
+        return showMessage(LINE,
                 taskList.toString(),
                 LINE);
     }
@@ -108,8 +108,8 @@ public class Ui {
      * @param t task that was deleted.
      * @param taskList task list after deletion.
      */
-    public void showDelete(Task t, TaskList taskList) {
-        showMessage(LINE,
+    public String showDelete(Task t, TaskList taskList) {
+        return showMessage(LINE,
                 "Noted. I've removed this task:",
                 t.toString(),
                 "Now you have %d task(s) in the list.".formatted(taskList.getCurrentSize()),
@@ -121,23 +121,22 @@ public class Ui {
      *
      * @param taskList new task list obtained after finding using keyword.
      */
-    public void showFind(TaskList taskList) {
+    public String showFind(TaskList taskList) {
         if (taskList.getCurrentSize() <= 0) {
-            showMessage(LINE,
+            return showMessage(LINE,
                     "There are no tasks which match the keyword.",
                     LINE);
-            return;
         }
-        showMessage(LINE,
+        return showMessage(LINE,
                 "Here are the matching tasks in your list:",
                 taskList.toString(),
                 LINE);
     }
 
     /**
-     * Displays an error message indicating tasks have failed to load from the storage.
+     * Displays an error message.
      */
-    public void showLoadingError() {
-        System.out.println("Error occurred while loading tasks.");
+    public String showError(String msg) {
+        return msg;
     }
 }

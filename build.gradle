@@ -46,7 +46,7 @@ test {
 }
 
 application {
-    mainClass.set("main.anoop.Anoop")
+    mainClass.set("main.anoop.Launcher")
 }
 
 shadowJar {
