@@ -29,7 +29,7 @@ public class Anoop {
             List<Task> tasks = storage.loadTasks();
             taskList = new TaskList(tasks);
         } catch (AnoopException e) {
-            this.ui.showLoadingError();
+            this.ui.showError(e.getMessage());
             taskList = new TaskList();
         }
     }
@@ -66,5 +66,21 @@ public class Anoop {
     public static void main(String[] args) {
         Anoop chatBot = new Anoop();
         chatBot.run();
+    }
+
+    /**
+     * Generates a response for the user's chat message.
+     */
+    public String getResponse(String input) {
+        try {
+            Command cmd = Parser.parse(input.trim());
+            return cmd.execute(ui, storage, taskList);
+        } catch (AnoopException e) {
+            return ui.showError(e.getMessage());
+        }
+    }
+
+    public String greet() {
+        return this.ui.showGreeting();
     }
 }

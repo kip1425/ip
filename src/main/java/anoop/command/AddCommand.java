@@ -23,12 +23,13 @@ public class AddCommand extends Command {
      * @param ui user interface to show task added message.
      * @param storage storage to save the updated task list.
      * @param taskList task list to add the task to.
+     * @return response string for the UI to display.
      * @throws AnoopException if list is already full or saving fails.
      */
     @Override
-    public void execute(Ui ui, Storage storage, TaskList taskList) throws AnoopException {
+    public String execute(Ui ui, Storage storage, TaskList taskList) throws AnoopException {
         taskList.store(this.task);
         storage.saveTasks(taskList.getListOfTasks());
-        ui.showTaskAdded(this.task, taskList);
+        return ui.showTaskAdded(this.task, taskList);
     }
 }

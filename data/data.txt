@@ -1,2 +1,2 @@
-[D][X] submit (by: Jan 29 2026, 8:00pm)
-[T][ ] join tutorial
+[D][ ] submit (by: Jan 29 2026, 8:00pm)
+[T][X] homeowkr
