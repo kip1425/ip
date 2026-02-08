@@ -7,6 +7,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
 /**
  * Controller for the main GUI.
  */
@@ -53,6 +55,11 @@ public class MainWindow extends AnchorPane {
                 DialogBox.getAnoopDialog(response, anoopImage)
         );
         userInput.clear();
+
+        if (anoop.consumeExitRequest()) {
+            Stage stage = (Stage) dialogContainer.getScene().getWindow();
+            stage.close();
+        }
     }
 }
 

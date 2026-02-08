@@ -2,10 +2,12 @@ package anoop;
 
 import java.util.List;
 
+import anoop.command.ByeCommand;
 import anoop.command.Command;
 import anoop.exception.AnoopException;
 import anoop.task.Task;
 import anoop.task.TaskList;
+import javafx.stage.WindowEvent;
 
 /**
  * Represents the Anoop chatbot.
@@ -15,6 +17,7 @@ public class Anoop {
     private final Ui ui;
     private final Storage storage;
     private TaskList taskList;
+    private boolean isExitRequested;
 
     /**
      * Instantiates an Anoop chatbot instance.
@@ -74,10 +77,24 @@ public class Anoop {
     public String getResponse(String input) {
         try {
             Command cmd = Parser.parse(input.trim());
-            return cmd.execute(ui, storage, taskList);
+            String response = cmd.execute(ui, storage, taskList);
+            isExitRequested = cmd.isExit();
+            return response;
         } catch (AnoopException e) {
+            isExitRequested = false;
             return ui.showError(e.getMessage());
         }
+    }
+
+    /**
+     * Returns whether the last command requested an exit, and clears the flag.
+     *
+     * @return true if the app should exit.
+     */
+    public boolean consumeExitRequest() {
+        boolean shouldExit = isExitRequested;
+        isExitRequested = false;
+        return shouldExit;
     }
 
     public String greet() {
