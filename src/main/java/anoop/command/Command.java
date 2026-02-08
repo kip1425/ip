@@ -2,9 +2,9 @@ package anoop.command;
 
 import anoop.Storage;
 import anoop.Ui;
+import anoop.exception.AnoopException;
 import anoop.task.TaskList;
 
-import anoop.exception.AnoopException;
 
 /**
  * Represents commands which the chatbot can execute.

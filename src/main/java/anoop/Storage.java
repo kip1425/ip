@@ -1,16 +1,19 @@
 package anoop;
 
-import anoop.exception.*;
-import anoop.task.Task;
-import anoop.task.TaskFactory;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import anoop.exception.InvalidTaskFormatException;
+import anoop.exception.LoadFailedException;
+import anoop.exception.SaveFailedException;
+import anoop.task.Task;
+import anoop.task.TaskFactory;
+
+
 
 /**
  * Represents a task storage to save/load tasks in the disk.
@@ -18,13 +21,10 @@ import java.util.Scanner;
 public class Storage {
     /** Relative file directory for the data file. */
     private static final String DIR = "data";
-
-    /** Directory object representing the data folder. */
-    private final File dir;
-
     /** Data file name used to store tasks. */
     private static final String FILE = "data.txt";
-
+    /** Directory object representing the data folder. */
+    private final File dir;
     /** File object representing the task data file. */
     private final File file;
 
@@ -116,36 +116,36 @@ public class Storage {
         String fields = line.substring(6).trim();
 
         switch (taskType) {
-            case 'T':
-                return TaskFactory.createTaskFromData(taskType, isDone, fields);
-            case 'D': {
-                int byIndex = fields.indexOf("(by:");
+        case 'T':
+            return TaskFactory.createTaskFromData(taskType, isDone, fields);
+        case 'D': {
+            int byIndex = fields.indexOf("(by:");
 
-                if (byIndex == -1 || !fields.endsWith(")")) {
-                    throw new InvalidTaskFormatException("Invalid task format: " + line);
-                }
-
-                String desc = fields.substring(0, byIndex).trim();
-                String by = fields.substring(byIndex + 5, fields.length() - 1).trim();
-
-                return TaskFactory.createTaskFromData('D', isDone, desc, by);
+            if (byIndex == -1 || !fields.endsWith(")")) {
+                throw new InvalidTaskFormatException("Invalid task format: " + line);
             }
-            case 'E': {
-                int fromIndex = fields.indexOf("(from:");
-                int toIndex = fields.indexOf("to:");
 
-                if (fromIndex == -1 || toIndex == -1 || !fields.endsWith(")")) {
-                    throw new InvalidTaskFormatException("Invalid task format: " + line);
-                }
+            String desc = fields.substring(0, byIndex).trim();
+            String by = fields.substring(byIndex + 5, fields.length() - 1).trim();
 
-                String desc = fields.substring(0, fromIndex).trim();
-                String start = fields.substring(fromIndex + 6, toIndex).trim();
-                String end = fields.substring(toIndex + 3, fields.length() - 1).trim();
+            return TaskFactory.createTaskFromData('D', isDone, desc, by);
+        }
+        case 'E': {
+            int fromIndex = fields.indexOf("(from:");
+            int toIndex = fields.indexOf("to:");
 
-                return TaskFactory.createTaskFromData('E', isDone, desc, start, end);
+            if (fromIndex == -1 || toIndex == -1 || !fields.endsWith(")")) {
+                throw new InvalidTaskFormatException("Invalid task format: " + line);
             }
-            default:
-                throw new InvalidTaskFormatException("Unknown task type: " + taskType);
+
+            String desc = fields.substring(0, fromIndex).trim();
+            String start = fields.substring(fromIndex + 6, toIndex).trim();
+            String end = fields.substring(toIndex + 3, fields.length() - 1).trim();
+
+            return TaskFactory.createTaskFromData('E', isDone, desc, start, end);
+        }
+        default:
+            throw new InvalidTaskFormatException("Unknown task type: " + taskType);
 
         }
     }

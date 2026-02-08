@@ -1,13 +1,11 @@
 package anoop;
 
+import java.util.List;
+
 import anoop.command.Command;
 import anoop.exception.AnoopException;
-import anoop.exception.LoadFailedException;
 import anoop.task.Task;
 import anoop.task.TaskList;
-
-import java.io.IOException;
-import java.util.List;
 
 /**
  * Represents the Anoop chatbot.

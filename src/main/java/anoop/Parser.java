@@ -1,5 +1,8 @@
 package anoop;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import anoop.command.AddCommand;
 import anoop.command.ByeCommand;
@@ -16,9 +19,7 @@ import anoop.task.Event;
 import anoop.task.Task;
 import anoop.task.Todo;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+
 
 /**
  * Represents a parser to parse the user's input string into a Command object.
@@ -43,19 +44,17 @@ public class Parser {
         String cmdString = split[0].toLowerCase();
         String args = (split.length == 2) ? split[1].trim() : "";
 
-        Command cmd = null;
-
         return switch (cmdString) {
-            case "bye" -> new ByeCommand();
-            case "list" -> new ListCommand();
-            case "mark" -> new MarkCommand(parseIndex(args, cmdString));
-            case "unmark" -> new UnmarkCommand(parseIndex(args, cmdString));
-            case "todo" -> new AddCommand(parseTodo(args));
-            case "deadline" -> new AddCommand(parseDeadline(args));
-            case "event" -> new AddCommand(parseEvent(args));
-            case "delete" -> new DeleteCommand(parseIndex(args, cmdString));
-            case "find" -> new FindCommand(args);
-            default -> throw new AnoopException("Unknown command entered.");
+        case "bye" -> new ByeCommand();
+        case "list" -> new ListCommand();
+        case "mark" -> new MarkCommand(parseIndex(args, cmdString));
+        case "unmark" -> new UnmarkCommand(parseIndex(args, cmdString));
+        case "todo" -> new AddCommand(parseTodo(args));
+        case "deadline" -> new AddCommand(parseDeadline(args));
+        case "event" -> new AddCommand(parseEvent(args));
+        case "delete" -> new DeleteCommand(parseIndex(args, cmdString));
+        case "find" -> new FindCommand(args);
+        default -> throw new AnoopException("Unknown command entered.");
         };
     }
 
@@ -117,8 +116,8 @@ public class Parser {
             return new Deadline(description, false, byDateTime);
 
         } catch (DateTimeParseException e) {
-            throw new InvalidTaskFormatException("Invalid date/time format. " +
-                    "Use yyyy-MM-dd HHmm (e.g. 2026-01-29 2000).");
+            throw new InvalidTaskFormatException("Invalid date/time format. "
+                    + "Use yyyy-MM-dd HHmm (e.g. 2026-01-29 2000).");
         }
     }
 
@@ -152,8 +151,8 @@ public class Parser {
             return new Event(description, false, startDateTime, endDateTime);
 
         } catch (DateTimeParseException e) {
-            throw new InvalidTaskFormatException("Invalid date/time format. " +
-                    "Use yyyy-MM-dd HHmm (e.g. 2026-01-29 2000).");
+            throw new InvalidTaskFormatException("Invalid date/time format. "
+                    + "Use yyyy-MM-dd HHmm (e.g. 2026-01-29 2000).");
         }
     }
 }
