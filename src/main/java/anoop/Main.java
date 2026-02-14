@@ -17,12 +17,15 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
+        assert stage != null : "stage must not be null";
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
+            java.net.URL fxml = Main.class.getResource("/view/MainWindow.fxml");
+            assert fxml != null : "MainWindow.fxml must be present on classpath";
+            FXMLLoader fxmlLoader = new FXMLLoader(fxml);
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
             stage.setScene(scene);
-            fxmlLoader.<MainWindow>getController().setAnoop(anoop);  // inject the Anoop instance
+            fxmlLoader.<MainWindow>getController().setAnoop(anoop);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

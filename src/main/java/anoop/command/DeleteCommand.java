@@ -28,7 +28,11 @@ public class DeleteCommand extends Command {
      */
     @Override
     public String execute(Ui ui, Storage storage, TaskList taskList) throws AnoopException {
+        assert ui != null : "ui must not be null";
+        assert storage != null : "storage must not be null";
+        assert taskList != null : "taskList must not be null";
         Task t = taskList.getTask(index);
+        assert t != null : "task should exist for a valid index";
         taskList.deleteTask(index);
         storage.saveTasks(taskList.getListOfTasks());
         return ui.showDelete(t, taskList);

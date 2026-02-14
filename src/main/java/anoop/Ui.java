@@ -30,6 +30,7 @@ public class Ui {
      * @param input the message to display.
      */
     private String showMessage(String... input) {
+        assert input != null : "input lines must not be null";
         String res = String.join(System.lineSeparator(), input) + System.lineSeparator();
         return res;
     }
@@ -41,6 +42,8 @@ public class Ui {
      * @param taskList task list containing the added task.
      */
     public String showTaskAdded(Task t, TaskList taskList) {
+        assert t != null : "task must not be null";
+        assert taskList != null : "taskList must not be null";
         return showMessage(LINE,
                 "Got it. I've added this task:",
                 t.toString(),
@@ -64,6 +67,7 @@ public class Ui {
      * @param t task that was marked.
      */
     public String showMarked(Task t) {
+        assert t != null : "task must not be null";
         return showMessage(LINE,
                 "Nice! I've marked this task as done:",
                 t.toString(),
@@ -76,6 +80,7 @@ public class Ui {
      * @param t task that was unmarked.
      */
     public String showUnmarked(Task t) {
+        assert t != null : "task must not be null";
         return showMessage(LINE,
                 "OK, I've marked this task as not done yet:",
                 t.toString(),
@@ -97,6 +102,7 @@ public class Ui {
      * @param taskList task list to show.
      */
     public String showList(TaskList taskList) {
+        assert taskList != null : "taskList must not be null";
         return showMessage(LINE,
                 taskList.toString(),
                 LINE);
@@ -109,6 +115,8 @@ public class Ui {
      * @param taskList task list after deletion.
      */
     public String showDelete(Task t, TaskList taskList) {
+        assert t != null : "task must not be null";
+        assert taskList != null : "taskList must not be null";
         return showMessage(LINE,
                 "Noted. I've removed this task:",
                 t.toString(),
@@ -122,6 +130,7 @@ public class Ui {
      * @param taskList new task list obtained after finding using keyword.
      */
     public String showFind(TaskList taskList) {
+        assert taskList != null : "taskList must not be null";
         if (taskList.getCurrentSize() <= 0) {
             return showMessage(LINE,
                     "There are no tasks which match the keyword.",
@@ -137,6 +146,7 @@ public class Ui {
      * Displays an error message.
      */
     public String showError(String msg) {
+        assert msg != null : "error message must not be null";
         return msg;
     }
 }
