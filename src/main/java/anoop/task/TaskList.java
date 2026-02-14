@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class TaskList {
     /** ArrayList to store users' tasks. */
-    private List<Task> tasks = new ArrayList<>(100);
+    private final List<Task> tasks;
     /** Maximum capacity of task list. */
     private static final int MAX_SIZE = 100;
 
@@ -26,7 +26,7 @@ public class TaskList {
      * Constructor when loading from disk fails.
      */
     public TaskList() {
-
+        this(new ArrayList<>(MAX_SIZE));
     }
 
     /**
@@ -38,7 +38,7 @@ public class TaskList {
     public TaskList find(String keyword) {
         List<Task> list = new ArrayList<>();
         for (Task t : tasks) {
-            if (t.description.contains(keyword)) {
+            if (t.getDescription().contains(keyword)) {
                 list.add(t.clone());
             }
         }
@@ -72,13 +72,10 @@ public class TaskList {
      * @param index the 1-based index of the task to mark
      * @throws InvalidTaskIndexException if the index is invalid
      */
-    public void markTaskAsDone(int index) throws InvalidTaskIndexException {
-        if (index < 1 || index > this.tasks.size()) {
-            throw new InvalidTaskIndexException(index);
-        }
-
-        Task t = this.tasks.get(index - 1); // convert 1-based to 0-based
-        t.markAsDone();
+    public Task markTaskAsDone(int index) throws InvalidTaskIndexException {
+        Task task = getTask(index);
+        task.markAsDone();
+        return task;
     }
 
     /**
@@ -87,13 +84,10 @@ public class TaskList {
      * @param index the 1-based index of the task to unmark.
      * @throws InvalidTaskIndexException if the index is invalid.
      */
-    public void markTaskAsNotDone(int index) throws InvalidTaskIndexException {
-        if (index < 1 || index > tasks.size()) {
-            throw new InvalidTaskIndexException(index);
-        }
-
-        Task t = this.tasks.get(index - 1); // convert 1-based to 0-based
-        t.markAsNotDone();
+    public Task markTaskAsNotDone(int index) throws InvalidTaskIndexException {
+        Task task = getTask(index);
+        task.markAsNotDone();
+        return task;
     }
 
     /**
@@ -104,11 +98,7 @@ public class TaskList {
      * @throws InvalidTaskIndexException if the index is invalid.
      */
     public Task getTask(int index) throws InvalidTaskIndexException {
-        if (index < 1 || index > tasks.size()) {
-            throw new InvalidTaskIndexException(index);
-        }
-
-        return this.tasks.get(index - 1); // convert 1-based to 0-based;
+        return this.tasks.get(getZeroBasedIndex(index));
     }
 
     /**
@@ -135,12 +125,18 @@ public class TaskList {
      * @param index the 1-based index of the task to delete.
      * @throws InvalidTaskIndexException if the index is invalid.
      */
-    public void deleteTask(int index) throws InvalidTaskIndexException {
+    public Task deleteTask(int index) throws InvalidTaskIndexException {
+        return this.tasks.remove(getZeroBasedIndex(index));
+    }
+
+    /**
+     * Converts a 1-based task index to a 0-based array index after validation.
+     */
+    private int getZeroBasedIndex(int index) throws InvalidTaskIndexException {
         if (index < 1 || index > this.tasks.size()) {
             throw new InvalidTaskIndexException(index);
         }
-
-        this.tasks.remove(index - 1); // convert 1-based to 0-based;
+        return index - 1;
     }
 
     /**

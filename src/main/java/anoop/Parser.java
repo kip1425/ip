@@ -27,6 +27,7 @@ import anoop.task.Todo;
 public class Parser {
     /** Input format of date/time. */
     private static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+    private static final String DATE_TIME_HINT = "Use yyyy-MM-dd HHmm (e.g. 2026-01-29 2000).";
 
     // Prevents instantiation.
     private Parser() {
@@ -40,7 +41,12 @@ public class Parser {
      * @throws AnoopException
      */
     public static Command parse(String input) throws AnoopException {
-        String[] split = input.trim().split("\\s+", 2);
+        String trimmedInput = input == null ? "" : input.trim();
+        if (trimmedInput.isEmpty()) {
+            throw new AnoopException("Command cannot be empty.");
+        }
+
+        String[] split = trimmedInput.split("\\s+", 2);
         String cmdString = split[0].toLowerCase();
         String args = (split.length == 2) ? split[1].trim() : "";
 
@@ -68,7 +74,7 @@ public class Parser {
      */
     private static int parseIndex(String args, String cmd) throws AnoopException {
         if (args.isEmpty()) {
-            throw new AnoopException("Missing an integer argument to the" + cmd + "command.");
+            throw new AnoopException("Missing an integer argument to the " + cmd + " command.");
         }
         try {
             return Integer.parseInt(args.trim());
@@ -99,26 +105,19 @@ public class Parser {
      * @throws InvalidTaskFormatException
      */
     private static Task parseDeadline(String args) throws InvalidTaskFormatException {
-        try {
-            String[] split = args.split("/by", 2);
-            if (split.length != 2) {
-                throw new InvalidTaskFormatException("The command format is \"(description) /by (date)\"");
-            }
-
-            String description = split[0].trim();
-            String by = split[1].trim();
-
-            if (description.isEmpty() || by.isEmpty()) {
-                throw new InvalidTaskFormatException("Deadline description or date/time cannot be empty.");
-            }
-
-            LocalDateTime byDateTime = LocalDateTime.parse(by, INPUT_FORMAT);
-            return new Deadline(description, false, byDateTime);
-
-        } catch (DateTimeParseException e) {
-            throw new InvalidTaskFormatException("Invalid date/time format. "
-                    + "Use yyyy-MM-dd HHmm (e.g. 2026-01-29 2000).");
+        String[] split = args.split("/by", 2);
+        if (split.length != 2) {
+            throw new InvalidTaskFormatException("The command format is \"(description) /by (date)\"");
         }
+
+        String description = split[0].trim();
+        String by = split[1].trim();
+        if (description.isEmpty() || by.isEmpty()) {
+            throw new InvalidTaskFormatException("Deadline description or date/time cannot be empty.");
+        }
+
+        LocalDateTime byDateTime = parseDateTime(by);
+        return new Deadline(description, false, byDateTime);
     }
 
     /**
@@ -129,30 +128,33 @@ public class Parser {
      * @throws InvalidTaskFormatException
      */
     private static Task parseEvent(String args) throws InvalidTaskFormatException {
+        int fromIndex = args.indexOf("/from");
+        int toIndex = args.indexOf("/to");
+        if (fromIndex < 0 || toIndex < 0 || toIndex <= fromIndex) {
+            throw new InvalidTaskFormatException("The command format is \"(description) /from (date) /to (date)\"");
+        }
+
+        String description = args.substring(0, fromIndex).trim();
+        String start = args.substring(fromIndex + "/from".length(), toIndex).trim();
+        String end = args.substring(toIndex + "/to".length()).trim();
+        if (description.isEmpty() || start.isEmpty() || end.isEmpty()) {
+            throw new InvalidTaskFormatException("Event description or start and end date/time cannot be empty.");
+        }
+
+        LocalDateTime startDateTime = parseDateTime(start);
+        LocalDateTime endDateTime = parseDateTime(end);
+        if (endDateTime.isBefore(startDateTime)) {
+            throw new InvalidTaskFormatException("Event end date/time cannot be before start date/time.");
+        }
+
+        return new Event(description, false, startDateTime, endDateTime);
+    }
+
+    private static LocalDateTime parseDateTime(String rawDateTime) throws InvalidTaskFormatException {
         try {
-            String[] split = args.split("/from|/to", 3);
-            if (split.length != 3) {
-                throw new InvalidTaskFormatException("The command format is \"(description) "
-                        + "/from (date)"
-                        + "/to (date)\"");
-            }
-
-            String description = split[0].trim();
-            String start = split[1].trim();
-            String end = split[2].trim();
-
-            if (description.isEmpty() || start.isEmpty() || end.isEmpty()) {
-                throw new InvalidTaskFormatException("Event description or start and end date/time "
-                        + "cannot be empty.");
-            }
-
-            LocalDateTime startDateTime = LocalDateTime.parse(start, INPUT_FORMAT);
-            LocalDateTime endDateTime = LocalDateTime.parse(end, INPUT_FORMAT);
-            return new Event(description, false, startDateTime, endDateTime);
-
+            return LocalDateTime.parse(rawDateTime, INPUT_FORMAT);
         } catch (DateTimeParseException e) {
-            throw new InvalidTaskFormatException("Invalid date/time format. "
-                    + "Use yyyy-MM-dd HHmm (e.g. 2026-01-29 2000).");
+            throw new InvalidTaskFormatException("Invalid date/time format. " + DATE_TIME_HINT);
         }
     }
 }

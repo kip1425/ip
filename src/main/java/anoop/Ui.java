@@ -30,8 +30,7 @@ public class Ui {
      * @param input the message to display.
      */
     private String showMessage(String... input) {
-        String res = String.join(System.lineSeparator(), input) + System.lineSeparator();
-        return res;
+        return String.join(System.lineSeparator(), input) + System.lineSeparator();
     }
 
     /**
@@ -122,7 +121,7 @@ public class Ui {
      * @param taskList new task list obtained after finding using keyword.
      */
     public String showFind(TaskList taskList) {
-        if (taskList.getCurrentSize() <= 0) {
+        if (taskList.getCurrentSize() == 0) {
             return showMessage(LINE,
                     "There are no tasks which match the keyword.",
                     LINE);

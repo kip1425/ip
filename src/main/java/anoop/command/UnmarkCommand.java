@@ -28,8 +28,7 @@ public class UnmarkCommand extends Command {
      */
     @Override
     public String execute(Ui ui, Storage storage, TaskList taskList) throws AnoopException {
-        Task t = taskList.getTask(index);
-        taskList.markTaskAsNotDone(index);
+        Task t = taskList.markTaskAsNotDone(index);
         storage.saveTasks(taskList.getListOfTasks());
         return ui.showUnmarked(t);
     }

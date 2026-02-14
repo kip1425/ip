@@ -13,8 +13,6 @@ import anoop.exception.SaveFailedException;
 import anoop.task.Task;
 import anoop.task.TaskFactory;
 
-
-
 /**
  * Represents a task storage to save/load tasks in the disk.
  */
@@ -42,8 +40,8 @@ public class Storage {
      * @throws IOException creation of file or directory fails.
      */
     private void ensureFileExists() throws IOException {
-        if (!dir.exists()) {
-            dir.mkdir();
+        if (!dir.exists() && !dir.mkdirs()) {
+            throw new IOException("Failed to create data directory.");
         }
         if (!file.exists()) {
             file.createNewFile();
@@ -58,12 +56,12 @@ public class Storage {
     public void saveTasks(List<Task> tasks) throws SaveFailedException {
         try {
             this.ensureFileExists();
-            FileWriter fw = new FileWriter(this.file);
-            for (Task t : tasks) {
-                fw.write(t.toString());
-                fw.write(System.lineSeparator());
+            try (FileWriter fw = new FileWriter(this.file)) {
+                for (Task t : tasks) {
+                    fw.write(t.toString());
+                    fw.write(System.lineSeparator());
+                }
             }
-            fw.close();
         } catch (IOException e) {
             throw new SaveFailedException();
         }
@@ -78,18 +76,15 @@ public class Storage {
         try {
             this.ensureFileExists();
             List<Task> tasks = new ArrayList<>();
-            if (!this.file.exists()) {
-                return tasks;
-            }
-
-            Scanner sc = new Scanner(file);
-            while (sc.hasNextLine()) {
-                try {
-                    String line = sc.nextLine();
-                    Task t = this.parse(line);
-                    tasks.add(t);
-                } catch (InvalidTaskFormatException e) {
-                    System.out.println("Skipping corrupted line.");
+            try (Scanner sc = new Scanner(file)) {
+                while (sc.hasNextLine()) {
+                    try {
+                        String line = sc.nextLine();
+                        Task t = this.parse(line);
+                        tasks.add(t);
+                    } catch (InvalidTaskFormatException e) {
+                        System.out.println("Skipping corrupted line.");
+                    }
                 }
             }
             return tasks;
@@ -118,36 +113,37 @@ public class Storage {
         switch (taskType) {
         case 'T':
             return TaskFactory.createTaskFromData(taskType, isDone, fields);
-        case 'D': {
-            int byIndex = fields.indexOf("(by:");
-
-            if (byIndex == -1 || !fields.endsWith(")")) {
-                throw new InvalidTaskFormatException("Invalid task format: " + line);
-            }
-
-            String desc = fields.substring(0, byIndex).trim();
-            String by = fields.substring(byIndex + 5, fields.length() - 1).trim();
-
-            return TaskFactory.createTaskFromData('D', isDone, desc, by);
-        }
-        case 'E': {
-            int fromIndex = fields.indexOf("(from:");
-            int toIndex = fields.indexOf("to:");
-
-            if (fromIndex == -1 || toIndex == -1 || !fields.endsWith(")")) {
-                throw new InvalidTaskFormatException("Invalid task format: " + line);
-            }
-
-            String desc = fields.substring(0, fromIndex).trim();
-            String start = fields.substring(fromIndex + 6, toIndex).trim();
-            String end = fields.substring(toIndex + 3, fields.length() - 1).trim();
-
-            return TaskFactory.createTaskFromData('E', isDone, desc, start, end);
-        }
+        case 'D':
+            return parseDeadlineFromFields(line, isDone, fields);
+        case 'E':
+            return parseEventFromFields(line, isDone, fields);
         default:
             throw new InvalidTaskFormatException("Unknown task type: " + taskType);
 
         }
     }
 
+    private Task parseDeadlineFromFields(String line, boolean isDone, String fields) throws InvalidTaskFormatException {
+        int byIndex = fields.indexOf("(by:");
+        if (byIndex == -1 || !fields.endsWith(")")) {
+            throw new InvalidTaskFormatException("Invalid task format: " + line);
+        }
+
+        String desc = fields.substring(0, byIndex).trim();
+        String by = fields.substring(byIndex + 5, fields.length() - 1).trim();
+        return TaskFactory.createTaskFromData('D', isDone, desc, by);
+    }
+
+    private Task parseEventFromFields(String line, boolean isDone, String fields) throws InvalidTaskFormatException {
+        int fromIndex = fields.indexOf("(from:");
+        int toIndex = fields.indexOf(" to:");
+        if (fromIndex == -1 || toIndex == -1 || toIndex <= fromIndex || !fields.endsWith(")")) {
+            throw new InvalidTaskFormatException("Invalid task format: " + line);
+        }
+
+        String desc = fields.substring(0, fromIndex).trim();
+        String start = fields.substring(fromIndex + 6, toIndex).trim();
+        String end = fields.substring(toIndex + 4, fields.length() - 1).trim();
+        return TaskFactory.createTaskFromData('E', isDone, desc, start, end);
+    }
 }

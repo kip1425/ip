@@ -35,6 +35,13 @@ public abstract class Task {
     }
 
     /**
+     * Returns the task description.
+     */
+    public String getDescription() {
+        return this.description;
+    }
+
+    /**
      * Helper method to get completion status icon of task.
      * @return a string "X" if done or " " if not done.
      */

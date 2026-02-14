@@ -30,7 +30,6 @@ public class FindCommand extends Command {
      */
     @Override
     public String execute(Ui ui, Storage storage, TaskList taskList) {
-        TaskList temp = taskList.find(this.keyword);
-        return ui.showFind(temp);
+        return ui.showFind(taskList.find(this.keyword));
     }
 }

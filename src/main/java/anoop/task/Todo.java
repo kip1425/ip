@@ -3,7 +3,7 @@ package anoop.task;
 /**
  * Represents a Todo {@link Task}.
  */
-public class Todo extends Task{
+public class Todo extends Task {
     /**
      * Constructs a {@code Todo} {@link Task} with a description.
      * @param description a description of the task.
