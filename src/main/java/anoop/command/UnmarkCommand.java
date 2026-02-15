@@ -28,13 +28,11 @@ public class UnmarkCommand extends Command {
      */
     @Override
     public String execute(Ui ui, Storage storage, TaskList taskList) throws AnoopException {
-        Task t = taskList.markTaskAsNotDone(index);
         assert ui != null : "ui must not be null";
         assert storage != null : "storage must not be null";
         assert taskList != null : "taskList must not be null";
-        Task t = taskList.getTask(index);
+        Task t = taskList.markTaskAsNotDone(index);
         assert t != null : "task should exist for a valid index";
-        taskList.markTaskAsNotDone(index);
         storage.saveTasks(taskList.getListOfTasks());
         return ui.showUnmarked(t);
     }

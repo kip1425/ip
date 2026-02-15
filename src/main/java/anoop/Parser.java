@@ -45,8 +45,6 @@ public class Parser {
         if (trimmedInput.isEmpty()) {
             throw new AnoopException("Command cannot be empty.");
         }
-
-        String[] split = trimmedInput.split("\\s+", 2);
         assert input != null : "input must not be null";
         String[] split = input.trim().split("\\s+", 2);
         assert split.length > 2 : "split has failed";
@@ -112,11 +110,6 @@ public class Parser {
      */
     private static Task parseDeadline(String args) throws InvalidTaskFormatException {
         assert args != null : "args must not be null";
-        try {
-            String[] split = args.split("/by", 2);
-            if (split.length != 2) {
-                throw new InvalidTaskFormatException("The command format is \"(description) /by (date)\"");
-            }
         String[] split = args.split("/by", 2);
         if (split.length != 2) {
             throw new InvalidTaskFormatException("The command format is \"(description) /by (date)\"");
@@ -141,13 +134,6 @@ public class Parser {
      */
     private static Task parseEvent(String args) throws InvalidTaskFormatException {
         assert args != null : "args must not be null";
-        try {
-            String[] split = args.split("/from|/to", 3);
-            if (split.length != 3) {
-                throw new InvalidTaskFormatException("The command format is \"(description) "
-                        + "/from (date)"
-                        + "/to (date)\"");
-            }
         int fromIndex = args.indexOf("/from");
         int toIndex = args.indexOf("/to");
         if (fromIndex < 0 || toIndex < 0 || toIndex <= fromIndex) {

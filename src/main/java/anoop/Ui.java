@@ -31,8 +31,6 @@ public class Ui {
      */
     private String showMessage(String... input) {
         assert input != null : "input lines must not be null";
-        String res = String.join(System.lineSeparator(), input) + System.lineSeparator();
-        return res;
         return String.join(System.lineSeparator(), input) + System.lineSeparator();
     }
 
@@ -132,7 +130,6 @@ public class Ui {
      */
     public String showFind(TaskList taskList) {
         assert taskList != null : "taskList must not be null";
-        if (taskList.getCurrentSize() <= 0) {
         if (taskList.getCurrentSize() == 0) {
             return showMessage(LINE,
                     "There are no tasks which match the keyword.",

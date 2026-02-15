@@ -13,8 +13,6 @@ import anoop.exception.SaveFailedException;
 import anoop.task.Task;
 import anoop.task.TaskFactory;
 
-
-
 /**
  * Represents a task storage to save/load tasks in the disk.
  */
@@ -46,12 +44,10 @@ public class Storage {
     private void ensureFileExists() throws IOException {
         if (!dir.exists() && !dir.mkdirs()) {
             throw new IOException("Failed to create data directory.");
-        assert dir != null : "data directory must not be null";
-        assert file != null : "data file must not be null";
-        if (!dir.exists()) {
-            dir.mkdir();
-            assert dir.exists() : "data directory should exist after mkdir";
         }
+
+        assert dir != null : "data directory must not be null";
+
         if (!file.exists()) {
             file.createNewFile();
             assert file.exists() : "data file should exist after createNewFile";
@@ -72,11 +68,6 @@ public class Storage {
                 assert t != null : "task entries must not be null";
                 fw.write(t.toString());
                 fw.write(System.lineSeparator());
-            try (FileWriter fw = new FileWriter(this.file)) {
-                for (Task t : tasks) {
-                    fw.write(t.toString());
-                    fw.write(System.lineSeparator());
-                }
             }
             fw.close();
         } catch (IOException e) {
