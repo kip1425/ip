@@ -78,6 +78,7 @@ public class Anoop {
         assert input != null : "input must not be null";
         try {
             Command cmd = Parser.parse(input.trim());
+            Parser.addToHistory(cmd);
             String response = cmd.execute(ui, storage, taskList);
             isExitRequested = cmd.isExit();
             return response;

@@ -7,10 +7,12 @@ import java.time.format.DateTimeParseException;
 import anoop.command.AddCommand;
 import anoop.command.ByeCommand;
 import anoop.command.Command;
+import anoop.command.CommandHistory;
 import anoop.command.DeleteCommand;
 import anoop.command.FindCommand;
 import anoop.command.ListCommand;
 import anoop.command.MarkCommand;
+import anoop.command.UndoCommand;
 import anoop.command.UnmarkCommand;
 import anoop.exception.AnoopException;
 import anoop.exception.InvalidTaskFormatException;
@@ -19,8 +21,6 @@ import anoop.task.Event;
 import anoop.task.Task;
 import anoop.task.Todo;
 
-
-
 /**
  * Represents a parser to parse the user's input string into a Command object.
  */
@@ -28,9 +28,20 @@ public class Parser {
     /** Input format of date/time. */
     private static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     private static final String DATE_TIME_HINT = "Use yyyy-MM-dd HHmm (e.g. 2026-01-29 2000).";
+    private static final CommandHistory history = new CommandHistory();
 
     // Prevents instantiation.
     private Parser() {
+    }
+
+    /**
+     * Adds command to command history if command is undoable.
+     * @param cmd command to be added to history.
+     */
+    public static void addToHistory(Command cmd) {
+        if (cmd.isUndoable()) {
+            history.push(cmd);
+        }
     }
 
     /**
@@ -61,6 +72,7 @@ public class Parser {
         case "event" -> new AddCommand(parseEvent(args));
         case "delete" -> new DeleteCommand(parseIndex(args, cmdString));
         case "find" -> new FindCommand(args);
+        case "undo" -> new UndoCommand(history);
         default -> throw new AnoopException("Unknown command entered.");
         };
     }

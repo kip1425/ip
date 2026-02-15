@@ -5,11 +5,9 @@ import anoop.Ui;
 import anoop.exception.AnoopException;
 import anoop.task.TaskList;
 
-
 /**
  * Represents commands which the chatbot can execute.
  */
-
 public abstract class Command {
     /**
      * Executes the command and returns the UI response string.
@@ -25,10 +23,29 @@ public abstract class Command {
     /**
      * Returns false to indicate this command should not exit the application.
      *
-     * @return false
+     * @return {@code false} by default.
      */
     public boolean isExit() {
         return false;
+    }
+
+    /**
+     * Returns false to indicate this command cannot be undone.
+     *
+     * @return {@code false} by default.
+     */
+    public boolean isUndoable() {
+        return false;
+    }
+
+    /**
+     * Undoes the most recent undoable command.
+     *
+     * @param taskList task list to operate on.
+     * @throws AnoopException if command cannot be undone.
+     */
+    public void undo(TaskList taskList) throws AnoopException {
+        throw new AnoopException("This command cannot be undone.");
     }
 }
 
