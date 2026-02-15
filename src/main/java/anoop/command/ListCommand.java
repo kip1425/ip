@@ -18,6 +18,8 @@ public class ListCommand extends Command {
      */
     @Override
     public String execute(Ui ui, Storage storage, TaskList taskList) {
+        assert ui != null : "ui must not be null";
+        assert taskList != null : "taskList must not be null";
         return ui.showList(taskList);
     }
 }

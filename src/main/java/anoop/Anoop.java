@@ -75,6 +75,7 @@ public class Anoop {
      * Generates a response for the user's chat message.
      */
     public String getResponse(String input) {
+        assert input != null : "input must not be null";
         try {
             Command cmd = Parser.parse(input.trim());
             String response = cmd.execute(ui, storage, taskList);
@@ -98,6 +99,7 @@ public class Anoop {
     }
 
     public String greet() {
+        assert ui != null : "ui must not be null";
         return this.ui.showGreeting();
     }
 }

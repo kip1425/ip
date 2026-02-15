@@ -13,6 +13,8 @@ import anoop.exception.SaveFailedException;
 import anoop.task.Task;
 import anoop.task.TaskFactory;
 
+
+
 /**
  * Represents a task storage to save/load tasks in the disk.
  */
@@ -32,6 +34,8 @@ public class Storage {
     public Storage() {
         this.dir = new File(DIR);
         this.file = new File(DIR, FILE);
+        assert this.dir != null : "data directory must be initialized";
+        assert this.file != null : "data file must be initialized";
     }
 
     /**
@@ -42,9 +46,15 @@ public class Storage {
     private void ensureFileExists() throws IOException {
         if (!dir.exists() && !dir.mkdirs()) {
             throw new IOException("Failed to create data directory.");
+        assert dir != null : "data directory must not be null";
+        assert file != null : "data file must not be null";
+        if (!dir.exists()) {
+            dir.mkdir();
+            assert dir.exists() : "data directory should exist after mkdir";
         }
         if (!file.exists()) {
             file.createNewFile();
+            assert file.exists() : "data file should exist after createNewFile";
         }
     }
 
@@ -54,14 +64,21 @@ public class Storage {
      * @throws SaveFailedException when I/O error occurs when writing to the file.
      */
     public void saveTasks(List<Task> tasks) throws SaveFailedException {
+        assert tasks != null : "tasks must not be null";
         try {
             this.ensureFileExists();
+            FileWriter fw = new FileWriter(this.file);
+            for (Task t : tasks) {
+                assert t != null : "task entries must not be null";
+                fw.write(t.toString());
+                fw.write(System.lineSeparator());
             try (FileWriter fw = new FileWriter(this.file)) {
                 for (Task t : tasks) {
                     fw.write(t.toString());
                     fw.write(System.lineSeparator());
                 }
             }
+            fw.close();
         } catch (IOException e) {
             throw new SaveFailedException();
         }
@@ -76,6 +93,11 @@ public class Storage {
         try {
             this.ensureFileExists();
             List<Task> tasks = new ArrayList<>();
+            assert tasks != null : "loaded tasks list must be initialized";
+            if (!this.file.exists()) {
+                return tasks;
+            }
+
             try (Scanner sc = new Scanner(file)) {
                 while (sc.hasNextLine()) {
                     try {
@@ -100,6 +122,7 @@ public class Storage {
      * @throws InvalidTaskFormatException if input string does not follow the required format.
      */
     private Task parse(String line) throws InvalidTaskFormatException {
+        assert line != null : "line must not be null";
         if (line.length() < 6 || line.charAt(0) != '[' || line.charAt(2) != ']'
                 || line.charAt(3) != '[' || line.charAt(5) != ']') {
             throw new InvalidTaskFormatException("Invalid task format: " + line);
@@ -146,4 +169,5 @@ public class Storage {
         String end = fields.substring(toIndex + 4, fields.length() - 1).trim();
         return TaskFactory.createTaskFromData('E', isDone, desc, start, end);
     }
+
 }
