@@ -14,6 +14,7 @@ public class AddCommand extends Command {
 
     /** Constructor for AddCommand, includes which task to add. */
     public AddCommand(Task task) {
+        assert task != null : "task must not be null";
         this.task = task;
     }
 
@@ -28,6 +29,9 @@ public class AddCommand extends Command {
      */
     @Override
     public String execute(Ui ui, Storage storage, TaskList taskList) throws AnoopException {
+        assert ui != null : "ui must not be null";
+        assert storage != null : "storage must not be null";
+        assert taskList != null : "taskList must not be null";
         taskList.store(this.task);
         storage.saveTasks(taskList.getListOfTasks());
         return ui.showTaskAdded(this.task, taskList);

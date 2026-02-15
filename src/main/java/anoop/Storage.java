@@ -34,6 +34,8 @@ public class Storage {
     public Storage() {
         this.dir = new File(DIR);
         this.file = new File(DIR, FILE);
+        assert this.dir != null : "data directory must be initialized";
+        assert this.file != null : "data file must be initialized";
     }
 
     /**
@@ -42,11 +44,15 @@ public class Storage {
      * @throws IOException creation of file or directory fails.
      */
     private void ensureFileExists() throws IOException {
+        assert dir != null : "data directory must not be null";
+        assert file != null : "data file must not be null";
         if (!dir.exists()) {
             dir.mkdir();
+            assert dir.exists() : "data directory should exist after mkdir";
         }
         if (!file.exists()) {
             file.createNewFile();
+            assert file.exists() : "data file should exist after createNewFile";
         }
     }
 
@@ -56,10 +62,12 @@ public class Storage {
      * @throws SaveFailedException when I/O error occurs when writing to the file.
      */
     public void saveTasks(List<Task> tasks) throws SaveFailedException {
+        assert tasks != null : "tasks must not be null";
         try {
             this.ensureFileExists();
             FileWriter fw = new FileWriter(this.file);
             for (Task t : tasks) {
+                assert t != null : "task entries must not be null";
                 fw.write(t.toString());
                 fw.write(System.lineSeparator());
             }
@@ -78,18 +86,20 @@ public class Storage {
         try {
             this.ensureFileExists();
             List<Task> tasks = new ArrayList<>();
+            assert tasks != null : "loaded tasks list must be initialized";
             if (!this.file.exists()) {
                 return tasks;
             }
 
-            Scanner sc = new Scanner(file);
-            while (sc.hasNextLine()) {
-                try {
-                    String line = sc.nextLine();
-                    Task t = this.parse(line);
-                    tasks.add(t);
-                } catch (InvalidTaskFormatException e) {
-                    System.out.println("Skipping corrupted line.");
+            try (Scanner sc = new Scanner(file)) {
+                while (sc.hasNextLine()) {
+                    try {
+                        String line = sc.nextLine();
+                        Task t = this.parse(line);
+                        tasks.add(t);
+                    } catch (InvalidTaskFormatException e) {
+                        System.out.println("Skipping corrupted line.");
+                    }
                 }
             }
             return tasks;
@@ -105,6 +115,7 @@ public class Storage {
      * @throws InvalidTaskFormatException if input string does not follow the required format.
      */
     private Task parse(String line) throws InvalidTaskFormatException {
+        assert line != null : "line must not be null";
         if (line.length() < 6 || line.charAt(0) != '[' || line.charAt(2) != ']'
                 || line.charAt(3) != '[' || line.charAt(5) != ']') {
             throw new InvalidTaskFormatException("Invalid task format: " + line);

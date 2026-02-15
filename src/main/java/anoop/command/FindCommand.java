@@ -17,6 +17,7 @@ public class FindCommand extends Command {
      * @param keyword Keyword to match within task descriptions.
      */
     public FindCommand(String keyword) {
+        assert keyword != null : "keyword must not be null";
         this.keyword = keyword;
     }
 
@@ -30,6 +31,8 @@ public class FindCommand extends Command {
      */
     @Override
     public String execute(Ui ui, Storage storage, TaskList taskList) {
+        assert ui != null : "ui must not be null";
+        assert taskList != null : "taskList must not be null";
         TaskList temp = taskList.find(this.keyword);
         return ui.showFind(temp);
     }
