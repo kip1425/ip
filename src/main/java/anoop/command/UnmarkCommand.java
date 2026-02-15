@@ -12,7 +12,11 @@ import anoop.task.TaskList;
 public class UnmarkCommand extends Command {
     private final int index;
 
-    /** Constructor for UnmarkCommand, includes which task to unmark. */
+    /**
+     * Creates an unmark command for the task at the given index.
+     *
+     * @param index index of task to mark as not done.
+     */
     public UnmarkCommand(int index) {
         this.index = index;
     }
@@ -35,5 +39,26 @@ public class UnmarkCommand extends Command {
         assert t != null : "task should exist for a valid index";
         storage.saveTasks(taskList.getListOfTasks());
         return ui.showUnmarked(t);
+    }
+
+    /**
+     * Reverts this command by marking the task as done.
+     *
+     * @param taskList task list to operate on.
+     * @throws AnoopException if the task cannot be marked done.
+     */
+    @Override
+    public void undo(TaskList taskList) throws AnoopException {
+        taskList.markTaskAsDone(this.index);
+    }
+
+    /**
+     * Returns {@code true} because unmark operations can be undone.
+     *
+     * @return {@code true}.
+     */
+    @Override
+    public boolean isUndoable() {
+        return true;
     }
 }

@@ -11,8 +11,13 @@ import anoop.task.TaskList;
  */
 public class AddCommand extends Command {
     private final Task task;
+    private int index;
 
-    /** Constructor for AddCommand, includes which task to add. */
+    /**
+     * Creates an add command for the given task.
+     *
+     * @param task task to add.
+     */
     public AddCommand(Task task) {
         assert task != null : "task must not be null";
         this.task = task;
@@ -33,7 +38,29 @@ public class AddCommand extends Command {
         assert storage != null : "storage must not be null";
         assert taskList != null : "taskList must not be null";
         taskList.store(this.task);
+        this.index = taskList.getCurrentSize();
         storage.saveTasks(taskList.getListOfTasks());
         return ui.showTaskAdded(this.task, taskList);
+    }
+
+    /**
+     * Removes the task that was added by this command.
+     *
+     * @param taskList task list to operate on.
+     * @throws AnoopException if the task cannot be removed.
+     */
+    @Override
+    public void undo(TaskList taskList) throws AnoopException {
+        taskList.deleteTask(this.index);
+    }
+
+    /**
+     * Returns {@code true} because add operations can be undone.
+     *
+     * @return {@code true}.
+     */
+    @Override
+    public boolean isUndoable() {
+        return true;
     }
 }

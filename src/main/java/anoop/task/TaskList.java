@@ -74,7 +74,7 @@ public class TaskList {
     /**
      * Marks the task at the given index as done.
      *
-     * @param index the 0-based index of the task to mark.
+     * @param index the 1-based index of the task to mark.
      * @return the marked task.
      * @throws InvalidTaskIndexException if the index is invalid.
      */
@@ -88,7 +88,7 @@ public class TaskList {
     /**
      * Marks the task at the given index as not done.
      *
-     * @param index the 0-based index of the task to unmark.
+     * @param index the 1-based index of the task to unmark.
      * @return the unmarked task.
      * @throws InvalidTaskIndexException if the index is invalid.
      */
@@ -134,7 +134,7 @@ public class TaskList {
     /**
      * Deletes the task at the 1-based index
      *
-     * @param index the 0-based index of the task to delete.
+     * @param index the 1-based index of the task to delete.
      * @return the deleted task.
      * @throws InvalidTaskIndexException if the index is invalid.
      */
