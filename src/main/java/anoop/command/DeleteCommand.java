@@ -42,6 +42,7 @@ public class DeleteCommand extends Command {
         this.task = t;
         taskList.deleteTask(index);
         storage.saveTasks(taskList.getListOfTasks());
+
         return ui.showDelete(t, taskList);
     }
 

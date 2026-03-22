@@ -56,9 +56,12 @@ public class Parser {
         if (trimmedInput.isEmpty()) {
             throw new AnoopException("Command cannot be empty.");
         }
+
         assert input != null : "input must not be null";
+
         String[] split = input.trim().split("\\s+", 2);
         assert split.length > 2 : "split has failed";
+
         String cmdString = split[0].toLowerCase();
         String args = (split.length == 2) ? split[1].trim() : "";
 
@@ -88,9 +91,11 @@ public class Parser {
     private static int parseIndex(String args, String cmd) throws AnoopException {
         assert args != null : "args must not be null";
         assert cmd != null : "cmd must not be null";
+
         if (args.isEmpty()) {
             throw new AnoopException("Missing an integer argument to the " + cmd + " command.");
         }
+
         try {
             return Integer.parseInt(args.trim());
         } catch (NumberFormatException e) {
@@ -107,9 +112,11 @@ public class Parser {
      */
     private static Task parseTodo(String args) throws InvalidTaskFormatException {
         assert args != null : "args must not be null";
+
         if (args.isEmpty()) {
             throw new InvalidTaskFormatException("Todo description cannot be empty.");
         }
+
         return new Todo(args, false);
     }
 
@@ -122,6 +129,7 @@ public class Parser {
      */
     private static Task parseDeadline(String args) throws InvalidTaskFormatException {
         assert args != null : "args must not be null";
+
         String[] split = args.split("/by", 2);
         if (split.length != 2) {
             throw new InvalidTaskFormatException("The command format is \"(description) /by (date)\"");
@@ -129,11 +137,13 @@ public class Parser {
 
         String description = split[0].trim();
         String by = split[1].trim();
+
         if (description.isEmpty() || by.isEmpty()) {
             throw new InvalidTaskFormatException("Deadline description or date/time cannot be empty.");
         }
 
         LocalDateTime byDateTime = parseDateTime(by);
+
         return new Deadline(description, false, byDateTime);
     }
 
@@ -146,6 +156,7 @@ public class Parser {
      */
     private static Task parseEvent(String args) throws InvalidTaskFormatException {
         assert args != null : "args must not be null";
+
         int fromIndex = args.indexOf("/from");
         int toIndex = args.indexOf("/to");
         if (fromIndex < 0 || toIndex < 0 || toIndex <= fromIndex) {
@@ -155,12 +166,14 @@ public class Parser {
         String description = args.substring(0, fromIndex).trim();
         String start = args.substring(fromIndex + "/from".length(), toIndex).trim();
         String end = args.substring(toIndex + "/to".length()).trim();
+
         if (description.isEmpty() || start.isEmpty() || end.isEmpty()) {
             throw new InvalidTaskFormatException("Event description or start and end date/time cannot be empty.");
         }
 
         LocalDateTime startDateTime = parseDateTime(start);
         LocalDateTime endDateTime = parseDateTime(end);
+
         if (endDateTime.isBefore(startDateTime)) {
             throw new InvalidTaskFormatException("Event end date/time cannot be before start date/time.");
         }

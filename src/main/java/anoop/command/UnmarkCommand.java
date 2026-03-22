@@ -35,9 +35,11 @@ public class UnmarkCommand extends Command {
         assert ui != null : "ui must not be null";
         assert storage != null : "storage must not be null";
         assert taskList != null : "taskList must not be null";
+
         Task t = taskList.markTaskAsNotDone(index);
         assert t != null : "task should exist for a valid index";
         storage.saveTasks(taskList.getListOfTasks());
+
         return ui.showUnmarked(t);
     }
 

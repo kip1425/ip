@@ -17,6 +17,7 @@ public abstract class Task {
      */
     public Task(String description, boolean isDone) {
         assert description != null : "description must not be null";
+
         this.description = description;
         this.isDone = isDone;
     }

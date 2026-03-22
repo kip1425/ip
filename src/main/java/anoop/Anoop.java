@@ -76,14 +76,17 @@ public class Anoop {
      */
     public String getResponse(String input) {
         assert input != null : "input must not be null";
+
         try {
             Command cmd = Parser.parse(input.trim());
             Parser.addToHistory(cmd);
             String response = cmd.execute(ui, storage, taskList);
             isExitRequested = cmd.isExit();
+
             return response;
         } catch (AnoopException e) {
             isExitRequested = false;
+
             return ui.showError(e.getMessage());
         }
     }
@@ -96,11 +99,16 @@ public class Anoop {
     public boolean consumeExitRequest() {
         boolean shouldExit = isExitRequested;
         isExitRequested = false;
+
         return shouldExit;
     }
 
+    /**
+     * Returns a greeting from Anoop.
+     */
     public String greet() {
         assert ui != null : "ui must not be null";
+
         return this.ui.showGreeting();
     }
 }

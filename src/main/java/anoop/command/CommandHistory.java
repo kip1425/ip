@@ -26,6 +26,7 @@ public class CommandHistory {
         if (history.size() == capacity) {
             history.removeFirst();
         }
+
         history.addLast(command);
     }
 

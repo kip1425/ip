@@ -41,12 +41,14 @@ public class TaskFactory {
 
     private static Todo createTodo(boolean isDone, String... args) throws InvalidTaskFormatException {
         validateArgCount(args, 1);
+
         return new Todo(args[0], isDone);
     }
 
     private static Deadline createDeadline(boolean isDone, String... args) throws InvalidTaskFormatException {
         validateArgCount(args, 2);
         LocalDateTime by = LocalDateTime.parse(args[1], OUTPUT_FORMAT);
+
         return new Deadline(args[0], isDone, by);
     }
 
@@ -54,6 +56,7 @@ public class TaskFactory {
         validateArgCount(args, 3);
         LocalDateTime from = LocalDateTime.parse(args[1], OUTPUT_FORMAT);
         LocalDateTime to = LocalDateTime.parse(args[2], OUTPUT_FORMAT);
+
         return new Event(args[0], isDone, from, to);
     }
 

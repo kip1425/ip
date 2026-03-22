@@ -32,6 +32,7 @@ public class Storage {
     public Storage() {
         this.dir = new File(DIR);
         this.file = new File(DIR, FILE);
+
         assert this.dir != null : "data directory must be initialized";
         assert this.file != null : "data file must be initialized";
     }
@@ -50,6 +51,7 @@ public class Storage {
 
         if (!file.exists()) {
             file.createNewFile();
+
             assert file.exists() : "data file should exist after createNewFile";
         }
     }
@@ -61,14 +63,17 @@ public class Storage {
      */
     public void saveTasks(List<Task> tasks) throws SaveFailedException {
         assert tasks != null : "tasks must not be null";
+
         try {
             this.ensureFileExists();
             FileWriter fw = new FileWriter(this.file);
+
             for (Task t : tasks) {
                 assert t != null : "task entries must not be null";
                 fw.write(t.toString());
                 fw.write(System.lineSeparator());
             }
+
             fw.close();
         } catch (IOException e) {
             throw new SaveFailedException();
@@ -84,7 +89,9 @@ public class Storage {
         try {
             this.ensureFileExists();
             List<Task> tasks = new ArrayList<>();
+
             assert tasks != null : "loaded tasks list must be initialized";
+
             if (!this.file.exists()) {
                 return tasks;
             }
@@ -100,6 +107,7 @@ public class Storage {
                     }
                 }
             }
+
             return tasks;
         } catch (IOException e) {
             throw new LoadFailedException();
@@ -114,6 +122,7 @@ public class Storage {
      */
     private Task parse(String line) throws InvalidTaskFormatException {
         assert line != null : "line must not be null";
+
         if (line.length() < 6 || line.charAt(0) != '[' || line.charAt(2) != ']'
                 || line.charAt(3) != '[' || line.charAt(5) != ']') {
             throw new InvalidTaskFormatException("Invalid task format: " + line);
@@ -145,6 +154,7 @@ public class Storage {
 
         String desc = fields.substring(0, byIndex).trim();
         String by = fields.substring(byIndex + 5, fields.length() - 1).trim();
+
         return TaskFactory.createTaskFromData('D', isDone, desc, by);
     }
 
@@ -158,6 +168,7 @@ public class Storage {
         String desc = fields.substring(0, fromIndex).trim();
         String start = fields.substring(fromIndex + 6, toIndex).trim();
         String end = fields.substring(toIndex + 4, fields.length() - 1).trim();
+
         return TaskFactory.createTaskFromData('E', isDone, desc, start, end);
     }
 

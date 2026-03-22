@@ -37,6 +37,7 @@ public class MainWindow extends AnchorPane {
     /** Injects the Anoop instance */
     public void setAnoop(Anoop anoop) {
         this.anoop = anoop;
+
         dialogContainer.getChildren().addAll(
                 DialogBox.getAnoopDialog(anoop.greet(), anoopImage)
         );
@@ -50,6 +51,7 @@ public class MainWindow extends AnchorPane {
     private void handleUserInput() {
         String input = userInput.getText();
         String response = anoop.getResponse(input);
+
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
                 DialogBox.getAnoopDialog(response, anoopImage)

@@ -31,6 +31,7 @@ public class Ui {
      */
     private String showMessage(String... input) {
         assert input != null : "input lines must not be null";
+
         return String.join(System.lineSeparator(), input) + System.lineSeparator();
     }
 
@@ -43,6 +44,7 @@ public class Ui {
     public String showTaskAdded(Task t, TaskList taskList) {
         assert t != null : "task must not be null";
         assert taskList != null : "taskList must not be null";
+
         return showMessage(LINE,
                 "Got it. I've added this task:",
                 t.toString(),
@@ -67,6 +69,7 @@ public class Ui {
      */
     public String showMarked(Task t) {
         assert t != null : "task must not be null";
+
         return showMessage(LINE,
                 "Nice! I've marked this task as done:",
                 t.toString(),
@@ -80,6 +83,7 @@ public class Ui {
      */
     public String showUnmarked(Task t) {
         assert t != null : "task must not be null";
+
         return showMessage(LINE,
                 "OK, I've marked this task as not done yet:",
                 t.toString(),
@@ -102,6 +106,11 @@ public class Ui {
      */
     public String showList(TaskList taskList) {
         assert taskList != null : "taskList must not be null";
+
+        if (taskList.getCurrentSize() == 0) {
+            return showMessage("Your list is currently empty.");
+        }
+
         return showMessage(LINE,
                 taskList.toString(),
                 LINE);
@@ -116,6 +125,7 @@ public class Ui {
     public String showDelete(Task t, TaskList taskList) {
         assert t != null : "task must not be null";
         assert taskList != null : "taskList must not be null";
+
         return showMessage(LINE,
                 "Noted. I've removed this task:",
                 t.toString(),
@@ -130,11 +140,13 @@ public class Ui {
      */
     public String showFind(TaskList taskList) {
         assert taskList != null : "taskList must not be null";
+
         if (taskList.getCurrentSize() == 0) {
             return showMessage(LINE,
                     "There are no tasks which match the keyword.",
                     LINE);
         }
+
         return showMessage(LINE,
                 "Here are the matching tasks in your list:",
                 taskList.toString(),
@@ -146,6 +158,7 @@ public class Ui {
      */
     public String showError(String msg) {
         assert msg != null : "error message must not be null";
+
         return msg;
     }
 }

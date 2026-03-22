@@ -20,6 +20,7 @@ public class AddCommand extends Command {
      */
     public AddCommand(Task task) {
         assert task != null : "task must not be null";
+
         this.task = task;
     }
 
@@ -37,9 +38,11 @@ public class AddCommand extends Command {
         assert ui != null : "ui must not be null";
         assert storage != null : "storage must not be null";
         assert taskList != null : "taskList must not be null";
+
         taskList.store(this.task);
         this.index = taskList.getCurrentSize();
         storage.saveTasks(taskList.getListOfTasks());
+
         return ui.showTaskAdded(this.task, taskList);
     }
 

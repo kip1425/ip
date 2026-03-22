@@ -57,6 +57,7 @@ public class StorageTest {
         Files.deleteIfExists(dataFile);
         Storage storage = new Storage();
         List<Task> tasks = storage.loadTasks();
+
         assertEquals(0, tasks.size());
     }
 

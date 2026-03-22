@@ -44,6 +44,7 @@ public class DialogBox extends HBox {
     private void flip() {
         ObservableList<Node> tmp = FXCollections.observableArrayList(this.getChildren());
         Collections.reverse(tmp);
+
         getChildren().setAll(tmp);
         setAlignment(Pos.TOP_LEFT);
     }
@@ -55,6 +56,7 @@ public class DialogBox extends HBox {
     public static DialogBox getAnoopDialog(String text, Image img) {
         var db = new DialogBox(text, img);
         db.flip();
+
         return db;
     }
 }

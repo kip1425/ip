@@ -20,6 +20,7 @@ public class TaskList {
      */
     public TaskList(List<Task> tasks) {
         assert tasks != null : "tasks must not be null";
+
         this.tasks = tasks;
     }
 
@@ -39,12 +40,14 @@ public class TaskList {
     public TaskList find(String keyword) {
         assert keyword != null : "keyword must not be null";
         List<Task> list = new ArrayList<>();
+
         for (Task t : tasks) {
             assert t != null : "stored tasks must not be null";
             if (t.getDescription().contains(keyword)) {
                 list.add(t.clone());
             }
         }
+
         return new TaskList(list);
     }
 
@@ -57,9 +60,11 @@ public class TaskList {
      */
     public void store(Task task) throws ListFullException {
         assert task != null : "task must not be null";
+
         if (isListFull()) {
             throw new ListFullException();
         }
+
         this.tasks.add(task);
     }
 
@@ -68,6 +73,7 @@ public class TaskList {
      */
     public boolean isListFull() {
         assert this.tasks != null : "tasks list must be initialized";
+
         return this.tasks.size() >= MAX_SIZE;
     }
 
@@ -82,6 +88,7 @@ public class TaskList {
         assert this.tasks != null : "tasks list must be initialized";
         Task task = getTask(index);
         task.markAsDone();
+
         return task;
     }
 
@@ -96,6 +103,7 @@ public class TaskList {
         assert this.tasks != null : "tasks list must be initialized";
         Task task = getTask(index);
         task.markAsNotDone();
+
         return task;
     }
 
@@ -108,6 +116,7 @@ public class TaskList {
      */
     public Task getTask(int index) throws InvalidTaskIndexException {
         assert this.tasks != null : "tasks list must be initialized";
+
         return this.tasks.get(getZeroBasedIndex(index));
     }
 
@@ -118,6 +127,7 @@ public class TaskList {
      */
     public List<Task> getListOfTasks() {
         assert this.tasks != null : "tasks list must be initialized";
+
         return this.tasks;
     }
 
@@ -128,6 +138,7 @@ public class TaskList {
      */
     public int getCurrentSize() {
         assert this.tasks != null : "tasks list must be initialized";
+
         return this.tasks.size();
     }
 
@@ -140,6 +151,7 @@ public class TaskList {
      */
     public Task deleteTask(int index) throws InvalidTaskIndexException {
         assert this.tasks != null : "tasks list must be initialized";
+
         return this.tasks.remove(getZeroBasedIndex(index));
     }
 
@@ -150,6 +162,7 @@ public class TaskList {
         if (index < 1 || index > this.tasks.size()) {
             throw new InvalidTaskIndexException(index);
         }
+
         return index - 1;
     }
 
@@ -160,10 +173,12 @@ public class TaskList {
     public String toString() {
         assert this.tasks != null : "tasks list must be initialized";
         StringBuilder sb = new StringBuilder();
+
         for (int i = 0; i < tasks.size(); i++) {
             // convert 0-based to 1-based
             sb.append(i + 1).append(". ").append(tasks.get(i).toString()).append("\n");
         }
+
         return sb.toString();
     }
 }

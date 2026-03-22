@@ -18,6 +18,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         assert stage != null : "stage must not be null";
+
         try {
             java.net.URL fxml = Main.class.getResource("/view/MainWindow.fxml");
             assert fxml != null : "MainWindow.fxml must be present on classpath";
