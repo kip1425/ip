@@ -1,5 +1,14 @@
 package anoop;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.lang.reflect.Field;
+import java.time.LocalDateTime;
+
+import org.junit.jupiter.api.Test;
+
 import anoop.command.AddCommand;
 import anoop.command.ByeCommand;
 import anoop.command.Command;
@@ -12,14 +21,6 @@ import anoop.task.Deadline;
 import anoop.task.Event;
 import anoop.task.Task;
 import anoop.task.Todo;
-import org.junit.jupiter.api.Test;
-
-import java.lang.reflect.Field;
-import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ParserTest {
     private static <T> T getField(Object target, String name, Class<T> type) {
@@ -188,8 +189,8 @@ public class ParserTest {
 
     @Test
     public void parse_eventInvalidDate_throwsException() {
-        AnoopException e = assertThrows(AnoopException.class,
-                () -> Parser.parse("event party /from 2026-01-29 /to 2026-01-29 2300"));
+        AnoopException e = assertThrows(AnoopException.class, () ->
+                Parser.parse("event party /from 2026-01-29 /to 2026-01-29 2300"));
 
         assertEquals("Invalid date/time format. Use yyyy-MM-dd HHmm (e.g. 2026-01-29 2000).", e.getMessage());
     }

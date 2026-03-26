@@ -40,7 +40,6 @@ public class DeleteCommand extends Command {
         Task t = taskList.deleteTask(index);
         assert t != null : "task should exist for a valid index";
         this.task = t;
-        taskList.deleteTask(index);
         storage.saveTasks(taskList.getListOfTasks());
 
         return ui.showDelete(t, taskList);
@@ -54,7 +53,7 @@ public class DeleteCommand extends Command {
      */
     @Override
     public void undo(TaskList taskList) throws AnoopException {
-        taskList.store(this.task);
+        taskList.insertTask(this.index, this.task);
     }
 
     /**

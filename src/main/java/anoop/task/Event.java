@@ -7,14 +7,14 @@ import java.time.format.DateTimeFormatter;
  * Represents an Event {@link Task}.
  */
 public class Event extends Task {
+    /** Output format of date/time when toString(). */
+    private static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma");
+
     /** Start date/time of event */
     protected final LocalDateTime start;
 
     /** End date/time of event */
     protected final LocalDateTime end;
-
-    /** Output format of date/time when toString(). */
-    private static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma");
 
     /**
      * Constructs an {@code Event} {@link Task} with a description.

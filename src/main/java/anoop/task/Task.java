@@ -37,6 +37,13 @@ public abstract class Task {
     }
 
     /**
+     * Returns whether the task is marked as done.
+     */
+    public boolean isDone() {
+        return this.isDone;
+    }
+
+    /**
      * Returns the task description.
      */
     public String getDescription() {

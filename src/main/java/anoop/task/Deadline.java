@@ -7,11 +7,11 @@ import java.time.format.DateTimeFormatter;
  * Represents a Deadline {@link Task}.
  */
 public class Deadline extends Task {
-    /** Date/time to complete the task by. */
-    protected final LocalDateTime by;
-
     /** Output format of date/time when toString(). */
     private static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma");
+
+    /** Date/time to complete the task by. */
+    protected final LocalDateTime by;
 
     /**
      * Constructs a {@code Deadline} {@link Task} with a description.

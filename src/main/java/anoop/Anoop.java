@@ -2,12 +2,10 @@ package anoop;
 
 import java.util.List;
 
-import anoop.command.ByeCommand;
 import anoop.command.Command;
 import anoop.exception.AnoopException;
 import anoop.task.Task;
 import anoop.task.TaskList;
-import javafx.stage.WindowEvent;
 
 /**
  * Represents the Anoop chatbot.
@@ -79,8 +77,8 @@ public class Anoop {
 
         try {
             Command cmd = Parser.parse(input.trim());
-            Parser.addToHistory(cmd);
             String response = cmd.execute(ui, storage, taskList);
+            Parser.addToHistory(cmd);
             isExitRequested = cmd.isExit();
 
             return response;

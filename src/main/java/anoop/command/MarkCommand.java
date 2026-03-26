@@ -11,6 +11,7 @@ import anoop.task.TaskList;
  */
 public class MarkCommand extends Command {
     private final int index;
+    private Task task;
 
     /**
      * Creates a mark command for the task at the given index.
@@ -37,6 +38,7 @@ public class MarkCommand extends Command {
         assert taskList != null : "taskList must not be null";
 
         Task t = taskList.markTaskAsDone(index);
+        this.task = t;
         assert t != null : "task should exist for a valid index";
         storage.saveTasks(taskList.getListOfTasks());
 
@@ -51,7 +53,11 @@ public class MarkCommand extends Command {
      */
     @Override
     public void undo(TaskList taskList) throws AnoopException {
-        taskList.markTaskAsNotDone(this.index);
+        if (this.task == null) {
+            throw new AnoopException("Unable to undo mark command.");
+        }
+
+        this.task.markAsNotDone();
     }
 
     /**

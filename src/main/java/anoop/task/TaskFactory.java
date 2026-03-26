@@ -29,10 +29,10 @@ public class TaskFactory {
     public static Task createTaskFromData(char type, boolean isDone, String... args) throws InvalidTaskFormatException {
         try {
             return switch (type) {
-                case 'T' -> createTodo(isDone, args);
-                case 'D' -> createDeadline(isDone, args);
-                case 'E' -> createEvent(isDone, args);
-                default -> throw new InvalidTaskFormatException("Invalid task format.");
+            case 'T' -> createTodo(isDone, args);
+            case 'D' -> createDeadline(isDone, args);
+            case 'E' -> createEvent(isDone, args);
+            default -> throw new InvalidTaskFormatException("Invalid task format.");
             };
         } catch (DateTimeParseException | IndexOutOfBoundsException e) {
             throw new InvalidTaskFormatException("Invalid task format.");

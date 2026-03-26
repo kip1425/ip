@@ -3,6 +3,7 @@ package anoop.task;
 import java.util.ArrayList;
 import java.util.List;
 
+import anoop.exception.AnoopException;
 import anoop.exception.InvalidTaskIndexException;
 import anoop.exception.ListFullException;
 
@@ -69,6 +70,24 @@ public class TaskList {
     }
 
     /**
+     * Inserts a task at the given 1-based index.
+     *
+     * @param index the 1-based index to insert at.
+     * @param task the task to insert.
+     * @throws InvalidTaskIndexException if the index is invalid for insertion.
+     * @throws ListFullException if the list is already full.
+     */
+    public void insertTask(int index, Task task) throws InvalidTaskIndexException, ListFullException {
+        assert task != null : "task must not be null";
+
+        if (isListFull()) {
+            throw new ListFullException();
+        }
+
+        this.tasks.add(getZeroBasedInsertIndex(index), task);
+    }
+
+    /**
      * Returns true if TaskList is full and false otherwise.
      */
     public boolean isListFull() {
@@ -82,11 +101,14 @@ public class TaskList {
      *
      * @param index the 1-based index of the task to mark.
      * @return the marked task.
-     * @throws InvalidTaskIndexException if the index is invalid.
+     * @throws AnoopException if the index is invalid or task is already done.
      */
-    public Task markTaskAsDone(int index) throws InvalidTaskIndexException {
+    public Task markTaskAsDone(int index) throws AnoopException {
         assert this.tasks != null : "tasks list must be initialized";
         Task task = getTask(index);
+        if (task.isDone()) {
+            throw new AnoopException("Task is already marked as done.");
+        }
         task.markAsDone();
 
         return task;
@@ -97,11 +119,14 @@ public class TaskList {
      *
      * @param index the 1-based index of the task to unmark.
      * @return the unmarked task.
-     * @throws InvalidTaskIndexException if the index is invalid.
+     * @throws AnoopException if the index is invalid or task is already not done.
      */
-    public Task markTaskAsNotDone(int index) throws InvalidTaskIndexException {
+    public Task markTaskAsNotDone(int index) throws AnoopException {
         assert this.tasks != null : "tasks list must be initialized";
         Task task = getTask(index);
+        if (!task.isDone()) {
+            throw new AnoopException("Task is already marked as not done.");
+        }
         task.markAsNotDone();
 
         return task;
@@ -160,6 +185,17 @@ public class TaskList {
      */
     private int getZeroBasedIndex(int index) throws InvalidTaskIndexException {
         if (index < 1 || index > this.tasks.size()) {
+            throw new InvalidTaskIndexException(index);
+        }
+
+        return index - 1;
+    }
+
+    /**
+     * Converts a 1-based insertion index to a 0-based array index after validation.
+     */
+    private int getZeroBasedInsertIndex(int index) throws InvalidTaskIndexException {
+        if (index < 1 || index > this.tasks.size() + 1) {
             throw new InvalidTaskIndexException(index);
         }
 

@@ -60,7 +60,7 @@ public class Parser {
         assert input != null : "input must not be null";
 
         String[] split = input.trim().split("\\s+", 2);
-        assert split.length > 2 : "split has failed";
+        assert split.length <= 2 : "split has failed";
 
         String cmdString = split[0].toLowerCase();
         String args = (split.length == 2) ? split[1].trim() : "";
@@ -74,7 +74,7 @@ public class Parser {
         case "deadline" -> new AddCommand(parseDeadline(args));
         case "event" -> new AddCommand(parseEvent(args));
         case "delete" -> new DeleteCommand(parseIndex(args, cmdString));
-        case "find" -> new FindCommand(args);
+        case "find" -> new FindCommand(parseFindKeyword(args));
         case "undo" -> new UndoCommand(history);
         default -> throw new AnoopException("Unknown command entered.");
         };
@@ -101,6 +101,24 @@ public class Parser {
         } catch (NumberFormatException e) {
             throw new AnoopException("Task number must be an integer.");
         }
+    }
+
+    /**
+     * Parses the keyword from the find command arguments.
+     *
+     * @param args argument string for find.
+     * @return keyword to search for.
+     * @throws AnoopException if the keyword is missing.
+     */
+    private static String parseFindKeyword(String args) throws AnoopException {
+        assert args != null : "args must not be null";
+
+        String keyword = args.trim();
+        if (keyword.isEmpty()) {
+            throw new AnoopException("Find keyword cannot be empty.");
+        }
+
+        return keyword;
     }
 
     /**
